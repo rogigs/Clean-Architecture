@@ -25,7 +25,7 @@ namespace Clean_Architecture.Application.UseCases
 
             };
 
-            await _projectRepository.Add(project);
+            await this._projectRepository.Add(project);
             return project;
         }
     }

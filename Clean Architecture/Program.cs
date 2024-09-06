@@ -21,6 +21,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddScoped<ICreateProject, CreateProject>();
+builder.Services.AddScoped<IUpdateProject, UpdateProject>();
+builder.Services.AddScoped<IReadProject, ReadProject>();
+builder.Services.AddScoped<IReadProjects, ReadProjects>();
+builder.Services.AddScoped<IDeleteProject, DeleteProject>();
+
+
+
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 
