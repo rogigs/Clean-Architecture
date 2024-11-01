@@ -71,12 +71,6 @@ Maintaining a clear flow of data between layers is essential. Communication shou
 
 [Clean Architecture: descubra o que é e onde aplicar Arquitetura Limpa](https://zup.com.br/blog/clean-architecture-arquitetura-limpa)
 
-# Opportunities for improvement
-
-In a project with multiple entities, it is necessary to create template classes for controllers and use cases to avoid implementation repetition and increase development speed. It is recommended to use the [Template Method](https://refactoring.guru/design-patterns/template-method) pattern.
-
-
-
 
 
 
