@@ -1,4 +1,5 @@
-﻿using Clean_Architecture.Domain.Entities;
+﻿using Clean_Architecture.Application.Exceptions;
+using Clean_Architecture.Domain.Entities;
 using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
@@ -11,9 +12,15 @@ namespace Clean_Architecture.Application.UseCases
             _projectRepository = projectRepository;
         }
 
-        public async Task<Project?> ExecuteAsync(Guid projectId)
+        public async Task<(ProjectException?, Project? )> ExecuteAsync(Guid projectId)
         {
-            return await _projectRepository.Delete(projectId);
+            try
+            {
+                return (null, await _projectRepository.Delete(projectId));
+            }
+            catch (Exception ex) {
+                return (new ProjectException("An error occurred while deleting the project.", ex), null);
+            }
         }
     }
 }

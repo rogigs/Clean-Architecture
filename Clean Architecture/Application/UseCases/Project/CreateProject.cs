@@ -17,7 +17,7 @@ namespace Clean_Architecture.Application.UseCases
             _projectRepository = projectRepository;
         }
 
-        public async Task<(ProjectException? Error, Project? Project)> ExecuteAsync(ProjectDTO projectDTO)
+        public async Task<(ProjectException?, Project?)> ExecuteAsync(ProjectDTO projectDTO)
         {
             try
             {

@@ -1,4 +1,5 @@
-﻿using Clean_Architecture.Application.UseCases.DTO;
+﻿using Clean_Architecture.Application.UseCases;
+using Clean_Architecture.Application.UseCases.DTO;
 using Clean_Architecture.Domain.Entities;
 using Clean_Architecture.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -37,14 +38,19 @@ namespace Clean_Architecture.Web.Controllers
 
             var (error, createdProject) = await _createProject.ExecuteAsync(projectDTO);
 
-
-            return error == null ? CreatedAtAction(null, createdProject) : BadRequest(new { error.Message});
+            return error == null ? CreatedAtAction(null, createdProject) : BadRequest(new { error.Message });
         }
 
         [HttpGet("{projectId:guid}", Name = "GetProject")]
         public async Task<IActionResult> GetAsync(Guid projectId)
         {
-            var project = await _readProject.ExecuteAsync(projectId);
+            var (error, project) = await _readProject.ExecuteAsync(projectId);
+
+            if (error != null)
+            {
+                return BadRequest(new { error.Message });
+            }
+
             return project == null
                 ? NotFound(new { Message = "Project not found" })
                 : Ok(project);
@@ -53,14 +59,20 @@ namespace Clean_Architecture.Web.Controllers
         [HttpGet(Name = "GetAllProject")]
         public async Task<IActionResult> GetAllAsync(int take, int skip)
         {
-            var projects = await _readProjects.ExecuteAsync(new Pagination(take, skip));
-            return Ok(projects);
+            var (error, projects) = await _readProjects.ExecuteAsync(new Pagination(take, skip));
+            return error == null ? Ok(projects) : BadRequest(new { error.Message });
         }
 
         [HttpDelete("{projectId:guid}", Name = "DeleteProject")]
         public async Task<IActionResult> DeleteAsync(Guid projectId)
         {
-            var project = await _deleteProject.ExecuteAsync(projectId);
+            var (error, project) = await _deleteProject.ExecuteAsync(projectId);
+
+            if (error != null)
+            {
+                return BadRequest(new { error.Message });
+            }
+
             return project == null
                 ? NotFound(new { Message = "Project not found" })
                 : Ok(project);
@@ -69,7 +81,13 @@ namespace Clean_Architecture.Web.Controllers
         [HttpPatch("{projectId:guid}", Name = "UpdateProject")]
         public async Task<IActionResult> UpdateAsync([FromBody] ProjectUpdateDTO projectDTO, Guid projectId)
         {
-            var project = await _updateProject.ExecuteAsync(projectDTO, projectId);
+            var (error, project) = await _updateProject.ExecuteAsync(projectDTO, projectId);
+
+            if (error != null)
+            {
+                return BadRequest(new { error.Message });
+            }
+
             return project == null
                 ? NotFound(new { Message = "Project not found" })
                 : Ok(project);
