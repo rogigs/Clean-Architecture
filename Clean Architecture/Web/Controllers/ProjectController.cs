@@ -33,10 +33,12 @@ namespace Clean_Architecture.Web.Controllers
         public async Task<IActionResult> PostAsync([FromBody] ProjectDTO projectDTO)
         {
             if (projectDTO == null || string.IsNullOrWhiteSpace(projectDTO.Name))
-                return BadRequest(new { Message = "Invalid project data" });
+                return BadRequest(new { Message = "Invalid Project data" });
 
-            var createdProject = await _createProject.ExecuteAsync(projectDTO);
-            return CreatedAtAction(null, createdProject);
+            var (error, createdProject) = await _createProject.ExecuteAsync(projectDTO);
+
+
+            return error == null ? CreatedAtAction(null, createdProject) : BadRequest(new { error.Message});
         }
 
         [HttpGet("{projectId:guid}", Name = "GetProject")]

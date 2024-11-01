@@ -6,6 +6,8 @@ using NSubstitute;
 using Clean_Architecture.Application.UseCases.DTO;
 using FluentAssertions;
 using Clean_Architecture.Domain.Entities;
+using Clean_Architecture.Application.Exceptions;
+using NSubstitute.ExceptionExtensions;
 
 namespace Clean_Architecture.Tests.Application.UseCases
 {
@@ -28,17 +30,18 @@ namespace Clean_Architecture.Tests.Application.UseCases
             // Expected
             var projectDTO = new ProjectDTO(
            _faker.Commerce.ProductName(),
-           _faker.Lorem.Paragraph(),      
-           _faker.Date.Future()          
+           _faker.Lorem.Paragraph(),
+           _faker.Date.Future()
        );
             // Act
-            var result = await _createProject.ExecuteAsync(projectDTO);
+            var (error, result) = await _createProject.ExecuteAsync(projectDTO);
 
             // Assert
+            error.Should().BeNull();
             result.Should().NotBeNull();
-            result.Name.Should().Be(projectDTO.Name);
-            result.Description.Should().Be(projectDTO.Description);
-            result.EndDate.Should().Be(projectDTO.EndDate);
+            result!.Name.Should().Be(projectDTO.Name);
+            result!.Description.Should().Be(projectDTO.Description);
+            result!.EndDate.Should().Be(projectDTO.EndDate);
 
             await _projectRepositoryMock.Received(1).Add(Arg.Is<Project>(p =>
                 p.Name == projectDTO.Name &&
@@ -54,34 +57,36 @@ namespace Clean_Architecture.Tests.Application.UseCases
           _faker.Commerce.ProductName(), null, null
       );
             // Act
-            var result = await _createProject.ExecuteAsync(projectDTO);
+            var (error, result) = await _createProject.ExecuteAsync(projectDTO);
 
-            // Assert
+            error.Should().BeNull();
             result.Should().NotBeNull();
-            result.Name.Should().Be(projectDTO.Name);
-
+            result!.Name.Should().Be(projectDTO.Name);
 
             await _projectRepositoryMock.Received(1).Add(Arg.Is<Project>(p =>
                 p.Name == projectDTO.Name));
         }
 
-        //TODO: add Exception
-        //[Fact]
-        //public async Task ExecuteAsync_WhenArgRequiredIsNull_ShouldThrowArgumentNullException()
-        //{
-        //    // Expected
-        //    var projectDTO = new ProjectDTO(
-        //        null, 
-        //        null,
-        //        null
-        //    );
+        [Fact]
+        public async Task ExecuteAsync_WhenErrorOccursInMethodAddOfProjectRepository_ShouldReturnATupleWithProjectExceptionAndProjectNull()
+        {
+            // Expected
+            var projectDTO = new ProjectDTO(
+             _faker.Commerce.ProductName(), null, null
+         );
 
-        //    // Act
-        //    Func<Task> act = async () => await _createProject.ExecuteAsync(projectDTO);
+            // Act
+            _projectRepositoryMock
+         .Add(Arg.Any<Project>())
+         .Throws(new Exception("Database error"));
+            var (error, result) = await _createProject.ExecuteAsync(projectDTO);
 
-        //    // Assert
-        //    await act.Should().ThrowAsync<ArgumentNullException>()
-        //        .WithMessage("Expected a <System.ArgumentNullException> to be thrown, but no exception was thrown.");
-        //}
+            // Assert
+            error.Should().NotBeNull();
+            error!.Should().BeOfType<ProjectException>();
+            error!.Message.Should().Be("An error occurred while creating the project.");
+            error!.InnerException!.Message.Should().Be("Database error");
+            result.Should().BeNull();
+        }
     }
 }

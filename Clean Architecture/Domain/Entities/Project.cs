@@ -7,7 +7,7 @@ namespace Clean_Architecture.Domain.Entities
         [Key]
         public Guid ProjectId { get; init; } = Guid.NewGuid();
 
-        [Required]
+        [Required(ErrorMessage = "Project name is required")]
         [StringLength(100)]
         public required string Name { get; set; }
 

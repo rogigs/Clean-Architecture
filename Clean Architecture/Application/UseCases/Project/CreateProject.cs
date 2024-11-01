@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Clean_Architecture.Application.Exceptions;
 using Clean_Architecture.Application.UseCases.DTO;
 using Clean_Architecture.Domain.Entities;
 using Clean_Architecture.Domain.Interfaces;
@@ -16,18 +17,24 @@ namespace Clean_Architecture.Application.UseCases
             _projectRepository = projectRepository;
         }
 
-        public async Task<Project> ExecuteAsync(ProjectDTO projectDTO)
+        public async Task<(ProjectException? Error, Project? Project)> ExecuteAsync(ProjectDTO projectDTO)
         {
-            var project = new Project
+            try
             {
+                var project = new Project
+                {
+                    Name = projectDTO.Name,
+                    Description = projectDTO.Description,
+                    EndDate = projectDTO.EndDate,
+                };
 
-                Name = projectDTO.Name,
-                Description = projectDTO.Description,
-                EndDate = projectDTO.EndDate,
-            };
-
-            await this._projectRepository.Add(project);
-            return project;
+                await _projectRepository.Add(project);
+                return (null, project); 
+            }
+            catch (Exception ex)
+            {
+                return (new ProjectException("An error occurred while creating the project.", ex), null);
+            }
         }
     }
 }
