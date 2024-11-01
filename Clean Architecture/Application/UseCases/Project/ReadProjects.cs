@@ -3,7 +3,7 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    public class ReadProjects : IReadProjects
+    internal sealed class ReadProjects : IReadProjects
     {
 
         private readonly IProjectRepository _projectRepository;

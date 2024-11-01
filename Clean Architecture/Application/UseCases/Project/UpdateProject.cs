@@ -4,7 +4,7 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    public class UpdateProject : IUpdateProject
+    internal sealed class UpdateProject : IUpdateProject
     {
         private readonly IProjectRepository _projectRepository;
         public UpdateProject(IProjectRepository projectRepository)

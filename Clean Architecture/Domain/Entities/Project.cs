@@ -2,7 +2,7 @@
 
 namespace Clean_Architecture.Domain.Entities
 {
-    public class Project
+    public record Project
     {
         [Key]
         public Guid ProjectId { get; init; } = Guid.NewGuid();

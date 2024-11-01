@@ -5,7 +5,7 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    public class CreateProject : ICreateProject
+    internal sealed class CreateProject : ICreateProject
     {
         private readonly IProjectRepository _projectRepository;
 

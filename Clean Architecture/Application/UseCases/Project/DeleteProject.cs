@@ -3,7 +3,7 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    public class DeleteProject : IDeleteProject
+    internal sealed class DeleteProject : IDeleteProject
     {
         private readonly IProjectRepository _projectRepository;
         public DeleteProject(IProjectRepository projectRepository)
