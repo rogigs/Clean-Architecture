@@ -7,7 +7,7 @@ namespace Clean_Architecture.Web.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    internal sealed class ProjectController : ControllerBase, IProjectController
+    public class ProjectController : ControllerBase, IProjectController
     {
         private readonly ICreateProject _createProject;
         private readonly IReadProject _readProject;
