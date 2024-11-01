@@ -5,20 +5,15 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    internal sealed class UpdateProject : IUpdateProject
+    internal sealed class UpdateProject(IProjectRepository projectRepository) : IUpdateProject
     {
-        private readonly IProjectRepository _projectRepository;
-        public UpdateProject(IProjectRepository projectRepository)
-        {
-            _projectRepository = projectRepository;
-        }
+        private readonly IProjectRepository _projectRepository = projectRepository;
 
         public Task<(ProjectException?, Project?)> ExecuteAsync(ProjectUpdateDTO project)
         {
             throw new NotSupportedException("This method is not supported and should not be implemented.");
 
         }
-
 
         public async Task<(ProjectException?, Project?)> ExecuteAsync(ProjectUpdateDTO projectDTO, Guid projectId)
         {

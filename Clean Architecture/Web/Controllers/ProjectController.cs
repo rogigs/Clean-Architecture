@@ -8,27 +8,18 @@ namespace Clean_Architecture.Web.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ProjectController : ControllerBase, IProjectController
+    public class ProjectController(
+        ICreateProject createProject,
+        IReadProject readProject,
+        IReadProjects readProjects,
+        IDeleteProject deleteProject,
+        IUpdateProject updateProject) : ControllerBase, IProjectController
     {
-        private readonly ICreateProject _createProject;
-        private readonly IReadProject _readProject;
-        private readonly IReadProjects _readProjects;
-        private readonly IDeleteProject _deleteProject;
-        private readonly IUpdateProject _updateProject;
-
-        public ProjectController(
-            ICreateProject createProject,
-            IReadProject readProject,
-            IReadProjects readProjects,
-            IDeleteProject deleteProject,
-            IUpdateProject updateProject)
-        {
-            _createProject = createProject;
-            _readProject = readProject;
-            _readProjects = readProjects;
-            _deleteProject = deleteProject;
-            _updateProject = updateProject;
-        }
+        private readonly ICreateProject _createProject = createProject;
+        private readonly IReadProject _readProject = readProject;
+        private readonly IReadProjects _readProjects = readProjects;
+        private readonly IDeleteProject _deleteProject = deleteProject;
+        private readonly IUpdateProject _updateProject = updateProject;
 
         [HttpPost(Name = "PostProject")]
         public async Task<IActionResult> PostAsync([FromBody] ProjectDTO projectDTO)

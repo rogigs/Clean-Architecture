@@ -8,14 +8,9 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    internal sealed class CreateProject : ICreateProject
+    internal sealed class CreateProject(IProjectRepository projectRepository) : ICreateProject
     {
-        private readonly IProjectRepository _projectRepository;
-
-        public CreateProject(IProjectRepository projectRepository)
-        {
-            _projectRepository = projectRepository;
-        }
+        private readonly IProjectRepository _projectRepository = projectRepository;
 
         public async Task<(ProjectException?, Project?)> ExecuteAsync(ProjectDTO projectDTO)
         {

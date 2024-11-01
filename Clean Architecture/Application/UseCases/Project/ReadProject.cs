@@ -4,13 +4,9 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    internal sealed class ReadProject : IReadProject
+    internal sealed class ReadProject(IProjectRepository projectRepository) : IReadProject
     {
-        private readonly IProjectRepository _projectRepository;
-        public ReadProject(IProjectRepository projectRepository)
-        {
-            _projectRepository = projectRepository;
-        }
+        private readonly IProjectRepository _projectRepository = projectRepository;
 
         public async Task<(ProjectException?, Project?)> ExecuteAsync(Guid projectId)
         {

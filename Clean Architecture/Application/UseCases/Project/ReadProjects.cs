@@ -4,14 +4,10 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    internal sealed class ReadProjects : IReadProjects
+    internal sealed class ReadProjects(IProjectRepository projectRepository) : IReadProjects
     {
 
-        private readonly IProjectRepository _projectRepository;
-        public ReadProjects(IProjectRepository projectRepository)
-        {
-            _projectRepository = projectRepository;
-        }
+        private readonly IProjectRepository _projectRepository = projectRepository;
 
         public async Task<(ProjectException?, IEnumerable<Project>?)> ExecuteAsync(Pagination pagination)
         {

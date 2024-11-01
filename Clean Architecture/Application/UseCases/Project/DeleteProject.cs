@@ -4,13 +4,9 @@ using Clean_Architecture.Domain.Interfaces;
 
 namespace Clean_Architecture.Application.UseCases
 {
-    internal sealed class DeleteProject : IDeleteProject
+    internal sealed class DeleteProject(IProjectRepository projectRepository) : IDeleteProject
     {
-        private readonly IProjectRepository _projectRepository;
-        public DeleteProject(IProjectRepository projectRepository)
-        {
-            _projectRepository = projectRepository;
-        }
+        private readonly IProjectRepository _projectRepository = projectRepository;
 
         public async Task<(ProjectException?, Project? )> ExecuteAsync(Guid projectId)
         {

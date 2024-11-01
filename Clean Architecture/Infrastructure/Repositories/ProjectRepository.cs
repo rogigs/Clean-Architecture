@@ -6,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clean_Architecture.Infrastructure.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class ProjectRepository(AppDbContext context) : IProjectRepository
     {
-        private readonly AppDbContext _context;
-
-        public ProjectRepository(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public async Task<Project?> GetById(Guid projectId)
         {
@@ -35,6 +30,7 @@ namespace Clean_Architecture.Infrastructure.Repositories
         public async Task<Project?> Update(ProjectUpdateDTO projectDTO, Guid projectId)
         {
             var projectDB = await _context.Projects.FindAsync(projectId);
+
             if (projectDB == null) { return null; }
 
             if (!string.IsNullOrEmpty(projectDTO?.Name))
