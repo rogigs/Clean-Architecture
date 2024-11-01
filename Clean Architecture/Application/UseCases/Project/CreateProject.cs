@@ -1,7 +1,9 @@
-﻿using Clean_Architecture.Application.UseCases.DTO;
+﻿using System.Runtime.CompilerServices;
+using Clean_Architecture.Application.UseCases.DTO;
 using Clean_Architecture.Domain.Entities;
 using Clean_Architecture.Domain.Interfaces;
 
+[assembly: InternalsVisibleTo("Clean Architecture.Tests")]
 
 namespace Clean_Architecture.Application.UseCases
 {
@@ -22,7 +24,6 @@ namespace Clean_Architecture.Application.UseCases
                 Name = projectDTO.Name,
                 Description = projectDTO.Description,
                 EndDate = projectDTO.EndDate,
-
             };
 
             await this._projectRepository.Add(project);
