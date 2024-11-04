@@ -25,7 +25,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
         public async Task ExecuteAsync_WhenArgContainId_ShouldGetAProjectById()
         {
             // Expected
-            var project = new Project
+            Project project = new()
             {
                 Name = _faker.Commerce.ProductName(),
             };
@@ -46,7 +46,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
         public async Task ExecuteAsync_WhenErrorOccursInMethodGetByIdOfProjectRepository_ShouldReturnATupleWithProjectExceptionAndProjectNull()
         {
             // Expected
-            var project = new Project
+            Project project = new()
             {
                 Name = _faker.Commerce.ProductName(),
             };

@@ -79,7 +79,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
             // Assert
             error.Should().NotBeNull();
             error!.Should().BeOfType<ProjectException>();
-            error!.Message.Should().Be("An error occurred while getting a project.");
+            error!.Message.Should().Be("An error occurred while uploading a project.");
             error!.InnerException!.Message.Should().Be("Database error");
             result.Should().BeNull();
         }

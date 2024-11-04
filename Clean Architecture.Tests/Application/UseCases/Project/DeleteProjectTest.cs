@@ -27,7 +27,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
         public async Task ExecuteAsync_WhenArgContainId_ShouldDeleteAProject()
         {
             // Expected
-            var project = new Project
+            Project project = new()
             {
                 Name = _faker.Commerce.ProductName(),
             };
@@ -46,10 +46,10 @@ namespace Clean_Architecture.Tests.Application.UseCases
         }
 
         [Fact]
-        public async Task ExecuteAsync_WhenErrorOccursInMethodAddOfProjectRepository_ShouldReturnATupleWithProjectExceptionAndProjectNull()
+        public async Task ExecuteAsync_WhenErrorOccursInMethodDeleteOfProjectRepository_ShouldReturnATupleWithProjectExceptionAndProjectNull()
         {
             // Expected
-            var project = new Project
+            Project project = new()
             {
                 Name = _faker.Commerce.ProductName(),
             };

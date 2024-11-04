@@ -15,11 +15,11 @@ namespace Clean_Architecture.Application.UseCases
 
         }
 
-        public async Task<(ProjectException?, Project?)> ExecuteAsync(ProjectUpdateDTO projectDTO, Guid projectId)
+        public async Task<(ProjectException?, Project?)> ExecuteAsync(ProjectUpdateDTO projectUpdateDTO, Guid projectId)
         {
             try
             {
-                return (null, await _projectRepository.Update(projectDTO, projectId));
+                return (null, await _projectRepository.Update(projectUpdateDTO, projectId));
             }
             catch (Exception ex)
             {

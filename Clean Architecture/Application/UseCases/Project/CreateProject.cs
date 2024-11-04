@@ -16,7 +16,7 @@ namespace Clean_Architecture.Application.UseCases
         {
             try
             {
-                var project = new Project
+                Project project = new()
                 {
                     Name = projectDTO.Name,
                     Description = projectDTO.Description,

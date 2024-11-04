@@ -27,7 +27,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
         public async Task ExecuteAsync_WhenArgContainAllAtributes_ShouldCreateAProject()
         {
             // Expected
-            var projectDTO = new ProjectDTO(
+            ProjectDTO projectDTO = new (
            _faker.Commerce.ProductName(),
            _faker.Lorem.Paragraph(),
            _faker.Date.Future()
@@ -52,7 +52,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
         public async Task ExecuteAsync_WhenArgContainJustRequiredAttributes_ShouldCreateAProject()
         {
             // Expected
-            var projectDTO = new ProjectDTO(
+            ProjectDTO projectDTO = new (
           _faker.Commerce.ProductName(), null, null
       );
             // Act
@@ -71,7 +71,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
         public async Task ExecuteAsync_WhenErrorOccursInMethodAddOfProjectRepository_ShouldReturnATupleWithProjectExceptionAndProjectNull()
         {
             // Expected
-            var projectDTO = new ProjectDTO(
+            ProjectDTO projectDTO = new (
              _faker.Commerce.ProductName(), null, null
          );
 
