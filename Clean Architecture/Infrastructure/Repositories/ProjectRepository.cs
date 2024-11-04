@@ -16,7 +16,7 @@ namespace Clean_Architecture.Infrastructure.Repositories
         }
 
         public async Task<IEnumerable<Project>> GetAll(
-            Pagination pagination)
+            PaginationDTO pagination)
         {
             return await _context.Projects.OrderBy(val => val.StartDate).Skip(pagination.Skip).Take(pagination.Take).ToListAsync();
         }
