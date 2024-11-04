@@ -33,20 +33,9 @@ namespace Clean_Architecture.Infrastructure.Repositories
 
             if (projectDB == null) { return null; }
 
-            if (!string.IsNullOrEmpty(projectDTO?.Name))
-            {
-                projectDB.Name = projectDTO.Name;
-            }
-
-            if (!string.IsNullOrEmpty(projectDTO?.Description))
-            {
-                projectDB.Description = projectDTO.Description;
-            }
-
-            if (projectDTO?.EndDate.HasValue == true)
-            {
-                projectDB.EndDate = projectDTO.EndDate.Value;
-            }
+            projectDB.Name = string.IsNullOrEmpty(projectDTO?.Name) ? projectDB.Name : projectDTO.Name;
+            projectDB.Description = string.IsNullOrEmpty(projectDTO?.Description) ? projectDB.Description : projectDTO.Description;
+            projectDB.EndDate = projectDTO?.EndDate.HasValue == true ? projectDTO.EndDate.Value : projectDB.EndDate;
 
             _context.Projects.Update(projectDB);
 
