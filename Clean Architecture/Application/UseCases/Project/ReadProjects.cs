@@ -1,4 +1,5 @@
 ﻿using Clean_Architecture.Application.Exceptions;
+using Clean_Architecture.Application.UseCases.DTO;
 using Clean_Architecture.Domain.Entities;
 using Clean_Architecture.Domain.Interfaces;
 
@@ -9,7 +10,7 @@ namespace Clean_Architecture.Application.UseCases
 
         private readonly IProjectRepository _projectRepository = projectRepository;
 
-        public async Task<(ProjectException?, IEnumerable<Project>?)> ExecuteAsync(Pagination pagination)
+        public async Task<(ProjectException?, IEnumerable<Project>?)> ExecuteAsync(PaginationDTO pagination)
         {
             try
             {

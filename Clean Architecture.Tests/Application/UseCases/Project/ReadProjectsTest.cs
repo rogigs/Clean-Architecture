@@ -6,6 +6,7 @@ using NSubstitute;
 using FluentAssertions;
 using Clean_Architecture.Application.Exceptions;
 using NSubstitute.ExceptionExtensions;
+using Clean_Architecture.Application.UseCases.DTO;
 
 namespace Clean_Architecture.Tests.Application.UseCases
 {
@@ -41,7 +42,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
 
 
             // Act
-            Pagination pagination = new(1, 0);
+            PaginationDTO pagination = new() { Take = 10, Skip = 0 };
             _projectRepositoryMock.GetAll(pagination).Returns(projects);
             var (error, result) = await _readProjects.ExecuteAsync(pagination);
 
@@ -50,7 +51,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
             result.Should().NotBeNull();
             result!.Should().BeEquivalentTo(projects);
 
-            await _projectRepositoryMock.Received(1).GetAll(Arg.Is<Pagination>(p =>
+            await _projectRepositoryMock.Received(1).GetAll(Arg.Is<PaginationDTO>(p =>
                 p.Take == pagination.Take &&
                 p.Skip == pagination.Skip
             ));
@@ -60,9 +61,10 @@ namespace Clean_Architecture.Tests.Application.UseCases
         public async Task ExecuteAsync_WhenErrorOccursInMethodGetAllOfProjectRepository_ShouldReturnATupleWithProjectExceptionAndProjectNull()
         {
             // Act
-            Pagination pagination = new(1, 0);
+            PaginationDTO pagination = new(){ Take = 10, Skip = 0};
+
             _projectRepositoryMock
-             .GetAll(Arg.Any<Pagination>())
+             .GetAll(Arg.Any<PaginationDTO>())
              .Throws(new Exception("Database error"));
             var (error, result) = await _readProjects.ExecuteAsync(pagination);
 

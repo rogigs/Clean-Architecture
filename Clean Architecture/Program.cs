@@ -1,7 +1,9 @@
 using Clean_Architecture.Application.UseCases;
+using Clean_Architecture.Application.Validations;
 using Clean_Architecture.Domain.Interfaces;
 using Clean_Architecture.Infrastructure.Data;
 using Clean_Architecture.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,18 +20,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
-
-
 builder.Services.AddScoped<ICreateProject, CreateProject>();
-builder.Services.AddScoped<IUpdateProject, UpdateProject>();
 builder.Services.AddScoped<IReadProject, ReadProject>();
 builder.Services.AddScoped<IReadProjects, ReadProjects>();
 builder.Services.AddScoped<IDeleteProject, DeleteProject>();
-
-
+builder.Services.AddScoped<IUpdateProject, UpdateProject>();
 
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new ValidatePaginationAttribute());
+});
 
 var app = builder.Build();
 
@@ -41,8 +43,9 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseAuthorization();
 
+app.UseHttpsRedirection();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

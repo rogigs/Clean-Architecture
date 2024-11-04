@@ -1,6 +1,5 @@
-﻿using Clean_Architecture.Application.UseCases;
-using Clean_Architecture.Application.UseCases.DTO;
-using Clean_Architecture.Domain.Entities;
+﻿using Clean_Architecture.Application.UseCases.DTO;
+using Clean_Architecture.Application.Validations;
 using Clean_Architecture.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,9 +47,12 @@ namespace Clean_Architecture.Web.Controllers
         }
 
         [HttpGet(Name = "GetAllProject")]
-        public async Task<IActionResult> GetAllAsync(int take, int skip)
+        [ValidatePaginationAttribute()]
+        public async Task<IActionResult> GetAllAsync(int take, int skip) 
         {
-            var (error, projects) = await _readProjects.ExecuteAsync(new Pagination(take, skip));
+            PaginationDTO pagination = new() { Take = take, Skip = skip };
+            var (error, projects) = await _readProjects.ExecuteAsync(pagination);
+
             return error == null ? Ok(projects) : BadRequest(new { error.Message });
         }
 
