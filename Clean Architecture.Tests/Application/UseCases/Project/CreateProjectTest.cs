@@ -1,13 +1,12 @@
-﻿using System;
-using Bogus;
+﻿using Bogus;
 using Clean_Architecture.Domain.Interfaces;
 using Clean_Architecture.Application.UseCases;
 using NSubstitute;
 using Clean_Architecture.Application.UseCases.DTO;
 using FluentAssertions;
-using Clean_Architecture.Domain.Entities;
 using Clean_Architecture.Application.Exceptions;
 using NSubstitute.ExceptionExtensions;
+using Clean_Architecture.Domain.Entities;
 
 namespace Clean_Architecture.Tests.Application.UseCases
 {
@@ -59,6 +58,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
             // Act
             var (error, result) = await _createProject.ExecuteAsync(projectDTO);
 
+            // Assert
             error.Should().BeNull();
             result.Should().NotBeNull();
             result!.Name.Should().Be(projectDTO.Name);
