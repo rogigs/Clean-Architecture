@@ -14,17 +14,13 @@ namespace Clean_Architecture.Tests.Application.UseCases
     {
 
         private readonly Faker _faker = new("pt_BR");
-        private readonly ITestOutputHelper _output;
-
         private readonly IProjectRepository _projectRepositoryMock;
         private readonly DeleteProject _deleteProject;
 
-        public DeleteProjectTest(ITestOutputHelper output)
+        public DeleteProjectTest()
         {
             _projectRepositoryMock = Substitute.For<IProjectRepository>();
             _deleteProject = new DeleteProject(_projectRepositoryMock);
-            _output = output;
-
         }
 
         [Fact]
@@ -39,8 +35,6 @@ namespace Clean_Architecture.Tests.Application.UseCases
             // Act
             _projectRepositoryMock.Delete(project.ProjectId).Returns(project);
             var (error, result) = await _deleteProject.ExecuteAsync(project.ProjectId);
-
-            _output.WriteLine($"Expected: {project}, Result: {result}");
 
             // Assert
             error.Should().BeNull();
@@ -70,7 +64,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
             // Assert
             error.Should().NotBeNull();
             error!.Should().BeOfType<ProjectException>();
-            error!.Message.Should().Be("An error occurred while deleting the project.");
+            error!.Message.Should().Be("An error occurred while deleting a project.");
             error!.InnerException!.Message.Should().Be("Database error");
             result.Should().BeNull();
         }

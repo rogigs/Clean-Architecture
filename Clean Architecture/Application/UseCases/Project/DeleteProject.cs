@@ -15,7 +15,7 @@ namespace Clean_Architecture.Application.UseCases
                 return (null, await _projectRepository.Delete(projectId));
             }
             catch (Exception ex) {
-                return (new ProjectException("An error occurred while deleting the project.", ex), null);
+                return (new ProjectException("An error occurred while deleting a project.", ex), null);
             }
         }
     }

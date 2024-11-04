@@ -17,7 +17,7 @@ namespace Clean_Architecture.Application.UseCases
             }
             catch (Exception ex)
             {
-                return (new ProjectException("An error occurred while getting a projects.", ex), null);
+                return (new ProjectException("An error occurred while getting projects.", ex), null);
             }
         }
     }

@@ -84,7 +84,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
             // Assert
             error.Should().NotBeNull();
             error!.Should().BeOfType<ProjectException>();
-            error!.Message.Should().Be("An error occurred while creating the project.");
+            error!.Message.Should().Be("An error occurred while creating a project.");
             error!.InnerException!.Message.Should().Be("Database error");
             result.Should().BeNull();
         }
