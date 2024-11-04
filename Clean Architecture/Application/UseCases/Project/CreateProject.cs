@@ -4,8 +4,6 @@ using Clean_Architecture.Application.UseCases.DTO;
 using Clean_Architecture.Domain.Entities;
 using Clean_Architecture.Domain.Interfaces;
 
-[assembly: InternalsVisibleTo("Clean Architecture.Tests")]
-
 namespace Clean_Architecture.Application.UseCases
 {
     internal sealed class CreateProject(IProjectRepository projectRepository) : ICreateProject

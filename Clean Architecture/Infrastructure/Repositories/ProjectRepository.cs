@@ -48,7 +48,6 @@ namespace Clean_Architecture.Infrastructure.Repositories
                 projectDB.EndDate = projectDTO.EndDate.Value;
             }
 
-
             _context.Projects.Update(projectDB);
 
             await _context.SaveChangesAsync();
