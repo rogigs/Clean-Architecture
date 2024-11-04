@@ -20,18 +20,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ICreateProject, CreateProject>();
 builder.Services.AddScoped<IReadProject, ReadProject>();
 builder.Services.AddScoped<IReadProjects, ReadProjects>();
 builder.Services.AddScoped<IDeleteProject, DeleteProject>();
 builder.Services.AddScoped<IUpdateProject, UpdateProject>();
-
-builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(new ValidatePaginationAttribute());
-});
 
 var app = builder.Build();
 

@@ -47,7 +47,7 @@ namespace Clean_Architecture.Web.Controllers
         }
 
         [HttpGet(Name = "GetAllProject")]
-        [ValidatePaginationAttribute()]
+        [ValidatePaginationAttributes]
         public async Task<IActionResult> GetAllAsync(int take, int skip) 
         {
             PaginationDTO pagination = new() { Take = take, Skip = skip };
@@ -72,6 +72,7 @@ namespace Clean_Architecture.Web.Controllers
         }
 
         [HttpPatch("{projectId:guid}", Name = "UpdateProject")]
+        [ValidateUpdateProjectAttributes]
         public async Task<IActionResult> UpdateAsync([FromBody] ProjectUpdateDTO projectDTO, Guid projectId)
         {
             var (error, project) = await _updateProject.ExecuteAsync(projectDTO, projectId);

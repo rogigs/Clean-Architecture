@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Clean_Architecture.Application.Validations
 {
-    public class ValidatePaginationAttribute : ActionFilterAttribute
+    public class ValidatePaginationAttributes : ActionFilterAttribute
     {
         private static readonly int[] AllowedTakeValues = { 10, 25, 50 };
 
