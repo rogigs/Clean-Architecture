@@ -8,7 +8,7 @@ In addition, the application performs CRUD operations in a scenario where projec
 
 ## Screenshots
 
-![preview-application](https://github.com/user-attachments/assets/e0718afb-ead8-4a39-a49f-b0587ce789eb)
+![preview-application](https://github.com/user-attachments/assets/4ca1ed9e-0bb8-4579-8fb1-3a4015f470ec)
 
 # Environment Variables
 
