@@ -56,7 +56,6 @@ namespace Clean_Architecture.Web.Controllers
 
             if (error != null) return BadRequest(new { error.Message });
 
-
             return project == null
                 ? NotFound(new { Message = "Project not found" })
                 : Ok(project);
@@ -69,7 +68,6 @@ namespace Clean_Architecture.Web.Controllers
             var (error, project) = await _updateProject.ExecuteAsync(projectDTO, projectId);
 
             if (error != null) return BadRequest(new { error.Message });
-
 
             return project == null
                 ? NotFound(new { Message = "Project not found" })

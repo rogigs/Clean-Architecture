@@ -77,8 +77,8 @@ namespace Clean_Architecture.Tests.Application.UseCases
 
             // Act
             _projectRepositoryMock
-         .Add(Arg.Any<Project>())
-         .Throws(new Exception("Database error"));
+                 .Add(Arg.Any<Project>())
+                 .Throws(new Exception("Database error"));
             var (error, result) = await _createProject.ExecuteAsync(projectDTO);
 
             // Assert
