@@ -3,6 +3,7 @@ using Clean_Architecture.Application.Validations;
 using Clean_Architecture.Domain.Interfaces;
 using Clean_Architecture.Infrastructure.Data;
 using Clean_Architecture.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +27,11 @@ builder.Services.AddScoped<IReadProject, ReadProject>();
 builder.Services.AddScoped<IReadProjects, ReadProjects>();
 builder.Services.AddScoped<IDeleteProject, DeleteProject>();
 builder.Services.AddScoped<IUpdateProject, UpdateProject>();
-
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(
+        new NamespaceRoutingConvention());
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,8 +40,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

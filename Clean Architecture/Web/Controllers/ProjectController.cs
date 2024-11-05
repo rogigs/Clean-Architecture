@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Clean_Architecture.Web.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class ProjectController(
         ICreateProject createProject,
         IReadProject readProject,
@@ -23,9 +22,6 @@ namespace Clean_Architecture.Web.Controllers
         [HttpPost(Name = "PostProject")]
         public async Task<IActionResult> PostAsync([FromBody] ProjectDTO projectDTO)
         {
-            if (projectDTO == null || string.IsNullOrWhiteSpace(projectDTO.Name))
-                return BadRequest(new { Message = "Invalid Project data" });
-
             var (error, createdProject) = await _createProject.ExecuteAsync(projectDTO);
 
             return error == null ? CreatedAtAction(null, createdProject) : BadRequest(new { error.Message });
@@ -36,10 +32,7 @@ namespace Clean_Architecture.Web.Controllers
         {
             var (error, project) = await _readProject.ExecuteAsync(projectId);
 
-            if (error != null)
-            {
-                return BadRequest(new { error.Message });
-            }
+            if (error != null) return BadRequest(new { error.Message });
 
             return project == null
                 ? NotFound(new { Message = "Project not found" })
@@ -48,7 +41,7 @@ namespace Clean_Architecture.Web.Controllers
 
         [HttpGet(Name = "GetAllProject")]
         [ValidatePaginationAttributes]
-        public async Task<IActionResult> GetAllAsync(int take, int skip) 
+        public async Task<IActionResult> GetAllAsync(int take, int skip)
         {
             PaginationDTO pagination = new() { Take = take, Skip = skip };
             var (error, projects) = await _readProjects.ExecuteAsync(pagination);
@@ -61,10 +54,8 @@ namespace Clean_Architecture.Web.Controllers
         {
             var (error, project) = await _deleteProject.ExecuteAsync(projectId);
 
-            if (error != null)
-            {
-                return BadRequest(new { error.Message });
-            }
+            if (error != null) return BadRequest(new { error.Message });
+
 
             return project == null
                 ? NotFound(new { Message = "Project not found" })
@@ -77,10 +68,8 @@ namespace Clean_Architecture.Web.Controllers
         {
             var (error, project) = await _updateProject.ExecuteAsync(projectDTO, projectId);
 
-            if (error != null)
-            {
-                return BadRequest(new { error.Message });
-            }
+            if (error != null) return BadRequest(new { error.Message });
+
 
             return project == null
                 ? NotFound(new { Message = "Project not found" })
