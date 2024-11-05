@@ -196,7 +196,7 @@ namespace Clean_Architecture.Tests.Web.Controllers
             // Expected
             Guid projectId = Guid.NewGuid();
             string name = _faker.Commerce.ProductName();
-            
+
             ProjectUpdateDTO projectDTO = new(
                 name,
                 null,
@@ -252,5 +252,59 @@ namespace Clean_Architecture.Tests.Web.Controllers
             result.Should().BeOfType<NotFoundObjectResult>()
                 .Which.Value.Should().BeEquivalentTo(new { Message = "Project not found" });
         }
+    }
+
+    public class GetProjectsTests : ProjectControllerTest
+    {
+        [Fact]
+        public async Task GetAllAsync_WhenListProjectsIsSuccess_ShouldReturnListWithProjects()
+        {
+            // Expected
+            PaginationDTO pagination = new() { Take = 10, Skip = 0 };
+            List<Project> projects =
+             [
+                 new ()
+                    {
+                        Name = _faker.Commerce.ProductName(),
+
+                    },
+                    new ()
+                    {
+                        Name = _faker.Commerce.ProductName(),
+
+                    }
+             ];
+
+            // Act
+            _readProjects.ExecuteAsync(pagination).Returns((null, projects));
+            IActionResult result = await _controller.GetAllAsync(pagination.Take, pagination.Skip);
+
+            // Assert
+            result.Should().BeOfType<OkObjectResult>()
+             .Which.Value.Should()
+                 .BeEquivalentTo(projects, options => options
+                 .Using<Project>(ctx => ctx.Subject.Should().BeEquivalentTo(ctx.Expectation,
+                     options => options
+                         .Excluding(p => p.ProjectId)
+                         .Excluding(p => p.StartDate)))
+                 .WhenTypeIs<Project>()); 
+        }
+
+        [Fact]
+        public async Task GetAllAsync_WhenListProjectsIsError_ShouldReturnListWithProjects()
+        {
+            // Expected
+            PaginationDTO pagination = new() { Take = 10, Skip = 0 };
+            ProjectException error = new("An error occurred while getting projects.");
+
+            // Act
+            _readProjects.ExecuteAsync(pagination).Returns((error, null));
+            IActionResult result = await _controller.GetAllAsync(pagination.Take, pagination.Skip);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(new { error.Message });
+        }
+
     }
 }
