@@ -17,7 +17,7 @@ namespace Clean_Architecture.Tests.Domain.Entities
             var name = _faker.Company.CompanyName();
 
             // Act
-            var project = new Project { Name = name };
+            Project project = new() { Name = name };
 
             // Assert
             project.Should().NotBeNull(); 
@@ -37,7 +37,7 @@ namespace Clean_Architecture.Tests.Domain.Entities
             var endDate = _faker.Date.Future();
 
             // Act
-            var project = new Project { Name = name, Description = description, EndDate = endDate    };
+            Project project = new() { Name = name, Description = description, EndDate = endDate };
 
             // Assert
             project.Should().NotBeNull();
