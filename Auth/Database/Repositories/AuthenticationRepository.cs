@@ -16,7 +16,7 @@ namespace Auth.Database.Repositories
     {
         private readonly AppDbContext _context = context;
 
-        private static string HashPassword(string password) => BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));
+        private static string HashPassword(string password) => BCrypt.Net.BCrypt.HashPassword(password);
 
         private static bool ValidatePassword(string password, string storedHash) => BCrypt.Net.BCrypt.Verify(password, storedHash);
 
