@@ -10,16 +10,9 @@ namespace Clean_Architecture.Infrastructure.Repositories
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<Project?> GetById(Guid projectId)
-        {
-            return await _context.Projects.FindAsync(projectId);
-        }
+        public async Task<Project?> GetById(Guid projectId) => await _context.Projects.FindAsync(projectId);
 
-        public async Task<IEnumerable<Project>> GetAll(
-            PaginationDTO pagination)
-        {
-            return await _context.Projects.OrderBy(val => val.StartDate).Skip(pagination.Skip).Take(pagination.Take).ToListAsync();
-        }
+        public async Task<IEnumerable<Project>> GetAll(PaginationDTO pagination) => await _context.Projects.OrderBy(val => val.StartDate).Skip(pagination.Skip).Take(pagination.Take).ToListAsync();
 
         public async Task Add(Project project)
         {
@@ -31,7 +24,7 @@ namespace Clean_Architecture.Infrastructure.Repositories
         {
             var projectDB = await _context.Projects.FindAsync(projectId);
 
-            if (projectDB == null) { return null; }
+            if (projectDB == null) return null;
 
             projectDB.Name = string.IsNullOrEmpty(projectDTO?.Name) ? projectDB.Name : projectDTO.Name;
             projectDB.Description = string.IsNullOrEmpty(projectDTO?.Description) ? projectDB.Description : projectDTO.Description;
@@ -48,11 +41,8 @@ namespace Clean_Architecture.Infrastructure.Repositories
         {
             var project = await _context.Projects.FindAsync(projectId);
 
-            if (project == null)
-            {
-                return null;
-            }
-
+            if (project == null) return null;
+            
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
 

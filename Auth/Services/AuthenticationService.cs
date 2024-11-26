@@ -48,6 +48,7 @@ namespace Auth.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            //TODO: create ID, it mustn trasnfer sensible data as Email
             Claim[] claims =
             [
                  new Claim(JwtRegisteredClaimNames.Sub, authentication.Email),

@@ -41,10 +41,9 @@ namespace Clean_Architecture.Web.Controllers
 
         [HttpGet(Name = "GetAllProject")]
         [ValidatePaginationAttributes]
-        public async Task<IActionResult> GetAllAsync(int take, int skip)
+        public async Task<IActionResult> GetAllAsync([FromQuery] PaginationDTO paginationDTO)
         {
-            PaginationDTO pagination = new() { Take = take, Skip = skip };
-            var (error, projects) = await _readProjects.ExecuteAsync(pagination);
+            var (error, projects) = await _readProjects.ExecuteAsync(paginationDTO);
 
             return error == null ? Ok(projects) : BadRequest(new { error.Message });
         }

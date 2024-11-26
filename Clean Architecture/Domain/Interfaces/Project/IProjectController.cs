@@ -2,5 +2,6 @@
 
 namespace Clean_Architecture.Domain.Interfaces
 {
-    public interface IProjectController : IController<ProjectDTO>;
+    //TODO: Add more methods in IController
+    public interface IProjectController : IController<ProjectDTO, ProjectUpdateDTO>;
 }

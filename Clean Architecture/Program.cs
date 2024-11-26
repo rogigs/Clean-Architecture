@@ -3,8 +3,6 @@ using Clean_Architecture.Application.Validations;
 using Clean_Architecture.Domain.Interfaces;
 using Clean_Architecture.Infrastructure.Data;
 using Clean_Architecture.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ICreateProject, CreateProject>();
 builder.Services.AddScoped<IReadProject, ReadProject>();

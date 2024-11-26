@@ -277,7 +277,7 @@ namespace Clean_Architecture.Tests.Web.Controllers
 
             // Act
             _readProjects.ExecuteAsync(pagination).Returns((null, projects));
-            IActionResult result = await _controller.GetAllAsync(pagination.Take, pagination.Skip);
+            IActionResult result = await _controller.GetAllAsync(pagination);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>()
@@ -299,7 +299,7 @@ namespace Clean_Architecture.Tests.Web.Controllers
 
             // Act
             _readProjects.ExecuteAsync(pagination).Returns((error, null));
-            IActionResult result = await _controller.GetAllAsync(pagination.Take, pagination.Skip);
+            IActionResult result = await _controller.GetAllAsync(pagination);
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>()

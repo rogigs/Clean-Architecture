@@ -1,5 +1,4 @@
 ﻿using Clean_Architecture.Application.UseCases.DTO;
-using Clean_Architecture.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
