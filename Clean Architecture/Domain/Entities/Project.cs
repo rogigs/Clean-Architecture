@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clean_Architecture.Domain.Entities
 {
-    [Index(nameof(ProjectId), IsUnique = true)]
+    [Index(nameof(ProjectId))]
     public record Project
     {
         [Key]

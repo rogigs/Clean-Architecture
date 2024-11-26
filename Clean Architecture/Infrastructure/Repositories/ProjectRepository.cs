@@ -20,15 +20,15 @@ namespace Clean_Architecture.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Project?> Update(ProjectUpdateDTO projectDTO, Guid projectId)
+        public async Task<Project?> Update(ProjectUpdateDTO projectUpdateDTO, Guid projectId)
         {
             var projectDB = await _context.Projects.FindAsync(projectId);
 
             if (projectDB == null) return null;
 
-            projectDB.Name = string.IsNullOrEmpty(projectDTO?.Name) ? projectDB.Name : projectDTO.Name;
-            projectDB.Description = string.IsNullOrEmpty(projectDTO?.Description) ? projectDB.Description : projectDTO.Description;
-            projectDB.EndDate = projectDTO?.EndDate.HasValue == true ? projectDTO.EndDate.Value : projectDB.EndDate;
+            projectDB.Name = string.IsNullOrEmpty(projectUpdateDTO?.Name) ? projectDB.Name : projectUpdateDTO.Name;
+            projectDB.Description = string.IsNullOrEmpty(projectUpdateDTO?.Description) ? projectDB.Description : projectUpdateDTO.Description;
+            projectDB.EndDate = projectUpdateDTO?.EndDate.HasValue == true ? projectUpdateDTO.EndDate.Value : projectDB.EndDate;
 
             _context.Projects.Update(projectDB);
 
