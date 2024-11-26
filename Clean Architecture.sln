@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean Architecture", "Clean
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean Architecture.Tests", "Clean Architecture.Tests\Clean Architecture.Tests.csproj", "{D1620EC2-39AA-4C73-97EC-195E1C926261}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth", "Auth\Auth.csproj", "{A2E8D0BB-F4EE-477E-AA7B-17826D7EF7ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth", "Auth\Auth.csproj", "{A2E8D0BB-F4EE-477E-AA7B-17826D7EF7ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users", "Users\Users.csproj", "{0ED1F3DC-C0A5-4B0A-AA7F-6651EA86D177}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{A2E8D0BB-F4EE-477E-AA7B-17826D7EF7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2E8D0BB-F4EE-477E-AA7B-17826D7EF7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2E8D0BB-F4EE-477E-AA7B-17826D7EF7ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ED1F3DC-C0A5-4B0A-AA7F-6651EA86D177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED1F3DC-C0A5-4B0A-AA7F-6651EA86D177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED1F3DC-C0A5-4B0A-AA7F-6651EA86D177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED1F3DC-C0A5-4B0A-AA7F-6651EA86D177}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
