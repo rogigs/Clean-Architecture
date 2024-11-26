@@ -6,7 +6,7 @@ namespace Auth.Controllers
 {
 
     public record AuthenticationDTO(string Email, string Password);
-    public record AuthenticationUpdateDTO(string Email, string? Password);
+    public record AuthenticationUpdateDTO(string Email, string? Password, string? NewPassword);
     public record RefreshTokenDTO(string Token, string RefreshToken);
 
 
@@ -64,7 +64,7 @@ namespace Auth.Controllers
         {
             var (error, authentication) = await _authenticationService.PostAsync(authenticationDTO);
 
-            return error == null ? CreatedAtAction(null, authentication) : BadRequest(new { error.Message });
+            return error == null ? CreatedAtAction(null, authentication!.Email): BadRequest(new { error.Message });
         }
 
 
@@ -78,7 +78,7 @@ namespace Auth.Controllers
 
             return authentication == null
                 ? NotFound(new { Message = "Authentication not found" })
-                : Ok(authentication);
+                : Ok(authentication.Email);
         }
 
         [Authorize]
@@ -91,7 +91,7 @@ namespace Auth.Controllers
 
             return authentication == null
                 ? NotFound(new { Message = "Authentication not found" })
-                : Ok(authentication);
+                : Ok(authentication.Email);
         }
     }
 

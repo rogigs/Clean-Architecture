@@ -1,6 +1,6 @@
 ﻿using Auth.Controllers;
 using Auth.Database.Entities;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Authentication;
 
 namespace Auth.Database.Repositories
 {
@@ -16,15 +16,24 @@ namespace Auth.Database.Repositories
     {
         private readonly AppDbContext _context = context;
 
+        private static string HashPassword(string password) => BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));
+
+        private static bool ValidatePassword(string password, string storedHash) => BCrypt.Net.BCrypt.Verify(password, storedHash);
+
         public async Task Add(Authentication authentication)
         {
+            authentication.Password = HashPassword(authentication.Password);
             await _context.Auth.AddAsync(authentication);
             await _context.SaveChangesAsync();
         }
 
         public async Task<Authentication?> GetByAuth(Authentication authentication)
         {
-            return await _context.Auth.FirstOrDefaultAsync(u => u.Email == authentication.Email && u.Password == authentication.Password);
+            var authDB = await _context.Auth.FindAsync(authentication.Email);
+
+            if (!ValidatePassword(authentication!.Password, authDB!.Password)) throw new AuthenticationException("Invalid credentials.");
+
+            return authDB;
         }
 
         public async Task<Authentication?> Update(AuthenticationUpdateDTO authenticationUpdateDTO)
@@ -33,8 +42,11 @@ namespace Auth.Database.Repositories
 
             if (authDB == null) return null;
 
+            bool isToChangePassword = !string.IsNullOrEmpty(authenticationUpdateDTO?.Password) && !string.IsNullOrEmpty(authenticationUpdateDTO?.NewPassword);
+            authDB.Password = isToChangePassword && ValidatePassword(authenticationUpdateDTO!.Password, authDB!.Password)
+                             ? authenticationUpdateDTO!.NewPassword
+                             : authDB.Password;
             authDB.Email = string.IsNullOrEmpty(authenticationUpdateDTO?.Email) ? authDB.Email : authenticationUpdateDTO.Email;
-            authDB.Password = string.IsNullOrEmpty(authenticationUpdateDTO?.Password) ? authDB.Password : authenticationUpdateDTO.Password;
 
             _context.Auth.Update(authDB);
 
@@ -48,7 +60,6 @@ namespace Auth.Database.Repositories
             var auth = await _context.Auth.FindAsync(email);
 
             if (auth == null) return null;
-
 
             _context.Auth.Remove(auth);
             await _context.SaveChangesAsync();

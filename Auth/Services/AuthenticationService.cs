@@ -1,5 +1,4 @@
-﻿using System.Security.Authentication;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text;
 using Auth.Controllers;
 using Auth.Database.Entities;
@@ -7,6 +6,8 @@ using Auth.Database.Repositories;
 using Auth.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using BCrypt.Net;
+
 
 namespace Auth.Services
 {
@@ -77,7 +78,6 @@ namespace Auth.Services
                 if (auth == null) return (new AutheticationException("Invalid email or password."), null);
 
                 var token = GenerateJwtToken(auth);
-               
                 var refreshToken = GenerateRefreshToken();
 
                 AuthTokens authTokens = new(token, refreshToken);
@@ -98,7 +98,7 @@ namespace Auth.Services
                 Authentication authentication = new()
                 {
                     Email = authenticationDTO.Email,
-                    Password = authenticationDTO.Password,
+                    Password = authenticationDTO.Password
                 };
 
                 await _authenticationRepository.Add(authentication);
