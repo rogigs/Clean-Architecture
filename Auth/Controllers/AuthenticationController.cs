@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Auth.Services;
-using Microsoft.AspNetCore.Components;
 
 namespace Auth.Controllers
 {
@@ -15,8 +14,8 @@ namespace Auth.Controllers
         Task<IActionResult> UpdateAsync(AuthenticationUpdateDTO authenticationUpdateDTO);
     }
 
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("Api/[controller]")]
     public class AuthenticationController(
         IAuthenticationService authenticationService
         ) : ControllerBase, IAuthenticationController
