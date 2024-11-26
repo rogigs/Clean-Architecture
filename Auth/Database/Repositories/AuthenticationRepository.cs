@@ -1,5 +1,6 @@
 ﻿using Auth.Controllers;
 using Auth.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Database.Repositories
 {
@@ -8,6 +9,7 @@ namespace Auth.Database.Repositories
         Task Add(Authentication authentication);
         Task<Authentication?> Update(AuthenticationUpdateDTO authenticationUpdateDTO);
         Task<Authentication?> Delete(string email);
+        Task<Authentication?> GetByAuth(Authentication authentication);
     }
 
     public class AuthenticationRepository(AppDbContext context) : IAuthenticationRepository
@@ -18,6 +20,11 @@ namespace Auth.Database.Repositories
         {
             await _context.Auth.AddAsync(authentication);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Authentication?> GetByAuth(Authentication authentication)
+        {
+            return await _context.Auth.FirstOrDefaultAsync(u => u.Email == authentication.Email && u.Password == authentication.Password);
         }
 
         public async Task<Authentication?> Update(AuthenticationUpdateDTO authenticationUpdateDTO)
