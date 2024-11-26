@@ -5,11 +5,11 @@ namespace Clean_Architecture.Application.Validations
 {
     public class ValidatePaginationAttributes : ActionFilterAttribute
     {
-        private static readonly int[] AllowedTakeValues = { 10, 25, 50 };
+        private static readonly int[] AllowedTakeValues = [10, 25, 50];
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (HasPaginationArguments(context, out var take, out var skip))
+            if (HasPaginationArguments(context, out int take, out int skip))
             {
                 if (!IsValidTake(take))
                 {

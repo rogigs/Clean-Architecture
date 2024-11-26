@@ -14,6 +14,7 @@ namespace Clean_Architecture.Application.UseCases
         {
             try
             {
+                //TODO: Add cache 
                 return (null, await _projectRepository.GetAll(pagination));
             }
             catch (Exception ex)
