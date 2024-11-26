@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
+using Microsoft.EntityFrameworkCore;
 
 namespace Clean_Architecture.Domain.Entities
 {
+    [Index(nameof(ProjectId), IsUnique = true)]
     public record Project
     {
         [Key]
