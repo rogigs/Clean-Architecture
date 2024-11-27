@@ -6,7 +6,7 @@ namespace Auth.Controllers
 {
 
     public record AuthenticationDTO(string Email, string Password);
-    public record AuthenticationUpdateDTO(string Email, string? Password, string? NewPassword);
+    public record AuthenticationUpdateDTO(string Email, string? NewEmail, string? Password, string? NewPassword);
     public record RefreshTokenDTO(string Token, string RefreshToken);
 
 
@@ -67,8 +67,6 @@ namespace Auth.Controllers
             return error == null ? CreatedAtAction(null, authentication!.Email): BadRequest(new { error.Message });
         }
 
-
-        [Authorize]
         [HttpDelete(Name = "DeleteAuthentication")]
         public async Task<IActionResult> DeleteAsync([FromBody] string email)
         {
@@ -81,7 +79,6 @@ namespace Auth.Controllers
                 : Ok(authentication.Email);
         }
 
-        [Authorize]
         [HttpPatch(Name = "UpdateAuthentication")]
         public async Task<IActionResult> UpdateAsync([FromBody] AuthenticationUpdateDTO authenticationUpdateDTO)
         {

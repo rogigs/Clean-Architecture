@@ -40,7 +40,6 @@ namespace Auth.Services
 
         private string GenerateJwtToken(Authentication authentication)
         {
-
             var signingKey = _configuration["JwtSettings:SigningKey"];
 
             if (string.IsNullOrEmpty(signingKey)) throw new InvalidOperationException("Signing key is not configured in the settings.");

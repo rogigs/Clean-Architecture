@@ -1,5 +1,6 @@
 ﻿using Auth.Controllers;
 using Auth.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Authentication;
 
 namespace Auth.Database.Repositories
@@ -43,10 +44,11 @@ namespace Auth.Database.Repositories
             if (authDB == null) return null;
 
             bool isToChangePassword = !string.IsNullOrEmpty(authenticationUpdateDTO?.Password) && !string.IsNullOrEmpty(authenticationUpdateDTO?.NewPassword);
-            authDB.Password = isToChangePassword && ValidatePassword(authenticationUpdateDTO!.Password, authDB!.Password)
-                             ? authenticationUpdateDTO!.NewPassword
+            authDB.Password = isToChangePassword && ValidatePassword(authenticationUpdateDTO!.Password, authDB.Password)
+                             ? HashPassword(authenticationUpdateDTO!.NewPassword)
                              : authDB.Password;
-            authDB.Email = string.IsNullOrEmpty(authenticationUpdateDTO?.Email) ? authDB.Email : authenticationUpdateDTO.Email;
+            //TODO: EF doesnt allow change PK
+            authDB.Email = string.IsNullOrEmpty(authenticationUpdateDTO?.NewEmail) ? authDB.Email : authenticationUpdateDTO.NewEmail;
 
             _context.Auth.Update(authDB);
 

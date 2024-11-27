@@ -22,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<ICreateUser, CreateUser>();
 builder.Services.AddScoped<IReadUser, ReadUser>();
 builder.Services.AddScoped<IReadUsers, ReadUsers>();
