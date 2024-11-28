@@ -37,7 +37,7 @@ namespace Users.Application.UseCases
                 };
 
                 RabbitMQConnection rabbitMqConnection = new();
-                await rabbitMqConnection.InitializeAsync();
+                await rabbitMqConnection.Initialization;
                 await rabbitMqConnection.SendMessageAsync("sendUserIdToProject", JsonSerializer.Serialize(new { user.UserId, userDTO.ProjectId }));
                 await rabbitMqConnection.CloseAsync();
 

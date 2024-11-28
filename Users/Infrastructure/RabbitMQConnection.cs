@@ -6,14 +6,25 @@ namespace Users.Infrastructure
 {
     public sealed class RabbitMQConnection : IAsyncInitialization
     {
-        private static readonly Lazy<RabbitMQConnection> _instance =
-            new(() => new RabbitMQConnection());
         private IChannel? _channel;
         private IConnection? _connection;
-        //TODO: add ENVIRONMENT VARIABLES
         private readonly ConnectionFactory _factory = new();
 
+        private static readonly Lazy<RabbitMQConnection> _instance =
+            new(() => new RabbitMQConnection());
+
         public static RabbitMQConnection Instance => _instance.Value;
+
+        public Task Initialization { get; private set; }
+
+        public IChannel Channel
+        {
+            get
+            {
+                bool isChannelOpen = _channel != null && _channel.IsOpen;
+                return isChannelOpen ? _channel! : throw new InvalidOperationException("The channel has not been initialized or is closed.");
+            }
+        }
 
         public IConnection Connection
         {
@@ -23,7 +34,10 @@ namespace Users.Infrastructure
             }
         }
 
-        private bool IsConnectionOpen() => _connection != null && _connection.IsOpen;
+        public RabbitMQConnection()
+        {
+            Initialization = InitializeAsync();
+        }
 
         public async Task InitializeAsync()
         {
@@ -45,27 +59,23 @@ namespace Users.Infrastructure
 
         public async Task SendMessageAsync(string queueName, string message)
         {
-            if (_channel == null) throw new InvalidOperationException("The channel has not been initialized.");
-            
-
-            // Configura a fila (deve ser idempotente)
-            await _channel.QueueDeclareAsync(queue: queueName,
+            await Channel.QueueDeclareAsync(queue: queueName,
                                   durable: false,
                                   exclusive: false,
                                   autoDelete: false,
                                   arguments: null);
 
-            // Converte a mensagem em bytes e envia para a fila
             byte[] body = Encoding.UTF8.GetBytes(message);
 
             BasicProperties props = new();
 
-            await _channel.BasicPublishAsync(exchange: "",
+            await Channel.BasicPublishAsync(exchange: "",
                                   routingKey: queueName,
                                   mandatory: true,
                                   basicProperties: props,
                                   body: body);
         }
 
+        private bool IsConnectionOpen() => _connection != null && _connection.IsOpen;
     }
 }
