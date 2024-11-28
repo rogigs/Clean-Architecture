@@ -4,6 +4,7 @@ using Users.Application.Exceptions;
 using Users.Application.UseCases.DTO;
 using Users.Domain.Entities;
 using Users.Domain.Interfaces;
+using Users.Infrastructure;
 
 namespace Users.Application.UseCases
 {
@@ -21,18 +22,31 @@ namespace Users.Application.UseCases
                 StringContent content = new(json, Encoding.UTF8, "application/json");
 
                 await _httpClient.PostAsync("http://localhost:5127/Api/Authentication/CreateUser", content);
-          
+
                 User user = new()
                 {
                     Name = userDTO.Name,
-                    Email = userDTO.Email, 
+                    Email = userDTO.Email,
                 };
 
+                var messageObj = new
+                {
+                    UserId = 123,
+                    UserName = "John Doe",
+                    Email = "john.doe@example.com"
+                };
+
+                RabbitMQConnection rabbitMqConnection = new();
+                await rabbitMqConnection.InitializeAsync();
+                await rabbitMqConnection.SendMessageAsync("sendUserIdToProject", JsonSerializer.Serialize(new { user.UserId, userDTO.ProjectId }));
+                await rabbitMqConnection.CloseAsync();
+
                 await _userRepository.Add(user);
-                return (null, user); 
+                return (null, user);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return (new UserException("An error occurred while creating a user.", ex), null);
             }
         }
