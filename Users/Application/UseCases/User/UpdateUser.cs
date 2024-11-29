@@ -22,8 +22,7 @@ namespace Users.Application.UseCases
             try
             {
                 bool isToSyncAuthService = !string.IsNullOrEmpty(userUpdateDTO?.Email);
-                Console.WriteLine(isToSyncAuthService);
-                Console.WriteLine(userUpdateDTO);
+                
                 if (isToSyncAuthService)
                 {
                     string json = JsonSerializer.Serialize(new { userUpdateDTO!.Email, userUpdateDTO?.NewEmail, userUpdateDTO?.Password, userUpdateDTO?.NewPassword });

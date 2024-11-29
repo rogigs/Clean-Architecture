@@ -21,7 +21,7 @@ namespace Users.Application.UseCases
                 string json = JsonSerializer.Serialize(new { userDTO.Email, userDTO.Password });
                 StringContent content = new(json, Encoding.UTF8, "application/json");
 
-                await _httpClient.PostAsync("http://localhost:5127/Api/Authentication/CreateUser", content);
+                //await _httpClient.PostAsync("http://localhost:5127/Api/Authentication/CreateUser", content);
 
                 User user = new()
                 {
@@ -36,7 +36,7 @@ namespace Users.Application.UseCases
                     Email = "john.doe@example.com"
                 };
 
-                RabbitMQConnection rabbitMqConnection = new();
+                RabbitMQConnection rabbitMqConnection = RabbitMQConnection.Instance;
                 await rabbitMqConnection.Initialization;
                 await rabbitMqConnection.SendMessageAsync("sendUserIdToProject", JsonSerializer.Serialize(new { user.UserId, userDTO.ProjectId }));
                 await rabbitMqConnection.CloseAsync();
@@ -46,7 +46,6 @@ namespace Users.Application.UseCases
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 return (new UserException("An error occurred while creating a user.", ex), null);
             }
         }

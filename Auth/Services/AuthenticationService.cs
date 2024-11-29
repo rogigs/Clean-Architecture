@@ -86,7 +86,6 @@ namespace Auth.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 return (new AutheticationException("An error occurred while logging.", ex), null);
             }
         }
