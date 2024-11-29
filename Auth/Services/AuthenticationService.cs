@@ -17,15 +17,14 @@ namespace Auth.Services
     );
 
     //TODO: add Refresh Token and Logout
-    // Task<AuthenticationException?> LogoutAsync(string RefreshToken);
-    // Task<AuthenticationException?> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO);
-
     public interface IAuthenticationService
     {
-        Task<(AutheticationException?, Authentication?)> PostAsync(AuthenticationDTO authenticationDTO);
-        Task<(AutheticationException?, Authentication?)> DeleteAsync(string email);
-        Task<(AutheticationException?, Authentication?)> UpdateAsync(AuthenticationUpdateDTO authenticationUpdateDTO);
-        Task<(AutheticationException?, AuthTokens?)> LoginAsync(AuthenticationDTO authenticationDTO);
+        Task<(AuthenticationException?, Authentication?)> PostAsync(AuthenticationDTO authenticationDTO);
+        Task<(AuthenticationException?, Authentication?)> DeleteAsync(string email);
+        Task<(AuthenticationException?, Authentication?)> UpdateAsync(AuthenticationUpdateDTO authenticationUpdateDTO);
+        Task<(AuthenticationException?, AuthTokens?)> LoginAsync(AuthenticationDTO authenticationDTO);
+        // Task<AuthenticationException?> LogoutAsync(string RefreshToken);
+        // Task<AuthenticationException?> RefreshTokenAsync(RefreshTokenDTO refreshTokenDTO);
     }
 
     public class AuthenticationService(IAuthenticationRepository authenticationRepository, IConfiguration configuration) : IAuthenticationService
@@ -33,10 +32,7 @@ namespace Auth.Services
         private readonly IAuthenticationRepository _authenticationRepository = authenticationRepository;
         private readonly IConfiguration _configuration = configuration;
 
-        private static string GenerateRefreshToken()
-        {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-        }
+        private static string GenerateRefreshToken() => Convert.ToBase64String(Guid.NewGuid().ToByteArray());
 
         private string GenerateJwtToken(Authentication authentication)
         {
@@ -63,7 +59,7 @@ namespace Auth.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<(AutheticationException?, AuthTokens?)> LoginAsync(AuthenticationDTO authenticationDTO)
+        public async Task<(AuthenticationException?, AuthTokens?)> LoginAsync(AuthenticationDTO authenticationDTO)
         {
             try
             {
@@ -75,7 +71,7 @@ namespace Auth.Services
 
                 var auth = await _authenticationRepository.GetByAuth(authentication);
 
-                if (auth == null) return (new AutheticationException("Invalid email or password."), null);
+                if (auth == null) return (new AuthenticationException("Invalid email or password."), null);
 
                 var token = GenerateJwtToken(auth);
                 var refreshToken = GenerateRefreshToken();
@@ -86,11 +82,11 @@ namespace Auth.Services
             }
             catch (Exception ex)
             {
-                return (new AutheticationException("An error occurred while logging.", ex), null);
+                return (new AuthenticationException("An error occurred while logging.", ex), null);
             }
         }
 
-        public async Task<(AutheticationException?, Authentication?)> PostAsync(AuthenticationDTO authenticationDTO)
+        public async Task<(AuthenticationException?, Authentication?)> PostAsync(AuthenticationDTO authenticationDTO)
         {
             try
             {
@@ -105,12 +101,12 @@ namespace Auth.Services
             }
             catch (Exception ex)
             {
-                return (new AutheticationException("An error occurred while creating a authentication.", ex), null);
+                return (new AuthenticationException("An error occurred while creating a authentication.", ex), null);
             }
 
         }
 
-        public async Task<(AutheticationException?, Authentication?)> DeleteAsync(string email)
+        public async Task<(AuthenticationException?, Authentication?)> DeleteAsync(string email)
         {
             try
             {
@@ -118,11 +114,11 @@ namespace Auth.Services
             }
             catch (Exception ex)
             {
-                return (new AutheticationException("An error occurred while deleting a authentication.", ex), null);
+                return (new AuthenticationException("An error occurred while deleting a authentication.", ex), null);
             }
         }
 
-        public async Task<(AutheticationException?, Authentication?)> UpdateAsync(AuthenticationUpdateDTO authenticationUpdateDTO)
+        public async Task<(AuthenticationException?, Authentication?)> UpdateAsync(AuthenticationUpdateDTO authenticationUpdateDTO)
         {
             try
             {
@@ -130,7 +126,7 @@ namespace Auth.Services
             }
             catch (Exception ex)
             {
-                return (new AutheticationException("An error occurred while uploading a authentication.", ex), null);
+                return (new AuthenticationException("An error occurred while uploading a authentication.", ex), null);
             }
         }
     }
