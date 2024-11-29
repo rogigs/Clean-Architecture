@@ -1,6 +1,4 @@
-﻿using Xunit;
-using System;
-using Clean_Architecture.Domain.Entities;
+﻿using Clean_Architecture.Domain.Entities;
 using Bogus;
 using FluentAssertions;
 
@@ -9,7 +7,7 @@ namespace Clean_Architecture.Tests.Domain.Entities
 
     public class ProjectTest
     {
-    private readonly Faker _faker = new("pt_BR");
+        private readonly Faker _faker = new("pt_BR");
         [Fact]
         public void Constructor_WhenInitializedWithAttributesRequired_ShouldCreateInstance()
         {
@@ -20,7 +18,7 @@ namespace Clean_Architecture.Tests.Domain.Entities
             Project project = new() { Name = name };
 
             // Assert
-            project.Should().NotBeNull(); 
+            project.Should().NotBeNull();
             project.ProjectId.Should().NotBe(Guid.Empty, "ProjectId should be initialized with a valid Guid");
             project.Name.Should().Be(name, "Name should match the provided value");
             project.Description.Should().BeNull("Description should be null if not provided");

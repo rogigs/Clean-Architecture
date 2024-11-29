@@ -28,12 +28,12 @@ namespace Clean_Architecture.Tests.Application.UseCases
             // Expected
             List<Project> projects =
                 [
-                    new ()
+                    new()
                     {
                         Name = _faker.Commerce.ProductName(),
 
                     },
-                    new ()
+                    new()
                     {
                         Name = _faker.Commerce.ProductName(),
 
@@ -61,7 +61,7 @@ namespace Clean_Architecture.Tests.Application.UseCases
         public async Task ExecuteAsync_WhenErrorOccursInMethodGetAllOfProjectRepository_ShouldReturnATupleWithProjectExceptionAndProjectNull()
         {
             // Act
-            PaginationDTO pagination = new(){ Take = 10, Skip = 0};
+            PaginationDTO pagination = new() { Take = 10, Skip = 0 };
 
             _projectRepositoryMock
              .GetAll(Arg.Any<PaginationDTO>())

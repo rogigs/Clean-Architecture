@@ -34,7 +34,7 @@ namespace Auth.Controllers
             var (error, authentication) = await _authenticationService.LoginAsync(authenticationDTO);
 
             return authentication == null
-                ? Unauthorized(new { error!.Message }) 
+                ? Unauthorized(new { error!.Message })
                 : Ok(new { authentication.Token, authentication.RefreshToken });
         }
 
@@ -64,7 +64,7 @@ namespace Auth.Controllers
         {
             var (error, authentication) = await _authenticationService.PostAsync(authenticationDTO);
 
-            return error == null ? CreatedAtAction(null, authentication!.Email): BadRequest(new { error.Message });
+            return error == null ? CreatedAtAction(null, authentication!.Email) : BadRequest(new { error.Message });
         }
 
         [HttpDelete(Name = "DeleteAuthentication")]

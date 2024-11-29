@@ -263,16 +263,16 @@ namespace Clean_Architecture.Tests.Web.Controllers
             PaginationDTO pagination = new() { Take = 10, Skip = 0 };
             List<Project> projects =
              [
-                 new ()
-                    {
-                        Name = _faker.Commerce.ProductName(),
+                 new()
+                 {
+                     Name = _faker.Commerce.ProductName(),
 
-                    },
-                    new ()
-                    {
-                        Name = _faker.Commerce.ProductName(),
+                 },
+                 new()
+                 {
+                     Name = _faker.Commerce.ProductName(),
 
-                    }
+                 }
              ];
 
             // Act
@@ -287,7 +287,7 @@ namespace Clean_Architecture.Tests.Web.Controllers
                      options => options
                          .Excluding(p => p.ProjectId)
                          .Excluding(p => p.StartDate)))
-                 .WhenTypeIs<Project>()); 
+                 .WhenTypeIs<Project>());
         }
 
         [Fact]

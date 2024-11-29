@@ -22,7 +22,7 @@ namespace Clean_Architecture.Application.UseCases
                 };
 
                 await _projectRepository.Add(project);
-                return (null, project); 
+                return (null, project);
             }
             catch (Exception ex)
             {

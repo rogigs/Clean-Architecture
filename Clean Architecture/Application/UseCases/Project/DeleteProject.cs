@@ -8,13 +8,14 @@ namespace Clean_Architecture.Application.UseCases
     {
         private readonly IProjectRepository _projectRepository = projectRepository;
 
-        public async Task<(ProjectException?, Project? )> ExecuteAsync(Guid projectId)
+        public async Task<(ProjectException?, Project?)> ExecuteAsync(Guid projectId)
         {
             try
             {
                 return (null, await _projectRepository.Delete(projectId));
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return (new ProjectException("An error occurred while deleting a project.", ex), null);
             }
         }

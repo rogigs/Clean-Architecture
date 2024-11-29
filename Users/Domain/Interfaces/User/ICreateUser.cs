@@ -4,5 +4,5 @@ using Users.Domain.Entities;
 
 namespace Users.Domain.Interfaces
 {
-    public interface ICreateUser : IUseCase<UserDTO, User , UserException>;
+    public interface ICreateUser : IUseCase<UserDTO, User, UserException>;
 }

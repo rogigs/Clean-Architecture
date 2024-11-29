@@ -42,7 +42,7 @@ namespace Clean_Architecture.Infrastructure.Repositories
             var project = await _context.Projects.FindAsync(projectId);
 
             if (project == null) return null;
-            
+
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
 

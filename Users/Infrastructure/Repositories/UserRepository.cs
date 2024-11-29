@@ -42,7 +42,7 @@ namespace Users.Infrastructure.Repositories
             var user = await _context.Users.FindAsync(userId);
 
             if (user == null) return null;
-            
+
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 

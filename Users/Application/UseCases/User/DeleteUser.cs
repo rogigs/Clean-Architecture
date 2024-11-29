@@ -11,7 +11,7 @@ namespace Users.Application.UseCases
         private readonly IUserRepository _userRepository = userRepository;
         private readonly HttpClient _httpClient = httpClient;
 
-        public async Task<(UserException?, User? )> ExecuteAsync(Guid userId)
+        public async Task<(UserException?, User?)> ExecuteAsync(Guid userId)
         {
             try
             {
@@ -30,7 +30,8 @@ namespace Users.Application.UseCases
 
                 return (null, user);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return (new UserException("An error occurred while deleting a user.", ex), null);
             }
         }
