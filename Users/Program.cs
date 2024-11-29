@@ -34,7 +34,6 @@ builder.Services.AddControllers(options =>
         new NamespaceRoutingConvention());
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

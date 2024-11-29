@@ -19,5 +19,6 @@ namespace Clean_Architecture.Domain.Entities
         public DateTime StartDate { get; init; } = DateTime.Now;
 
         public DateTime? EndDate { get; set; }
+        public required List<Guid> UsersId { get; set; } = [];
     }
 }

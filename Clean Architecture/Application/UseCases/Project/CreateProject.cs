@@ -19,6 +19,7 @@ namespace Clean_Architecture.Application.UseCases
                     Name = projectDTO.Name,
                     Description = projectDTO.Description,
                     EndDate = projectDTO.EndDate,
+                    UsersId = projectDTO.UsersId
                 };
 
                 await _projectRepository.Add(project);

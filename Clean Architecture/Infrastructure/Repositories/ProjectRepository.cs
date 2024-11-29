@@ -29,6 +29,7 @@ namespace Clean_Architecture.Infrastructure.Repositories
             projectDB.Name = string.IsNullOrEmpty(projectUpdateDTO?.Name) ? projectDB.Name : projectUpdateDTO.Name;
             projectDB.Description = string.IsNullOrEmpty(projectUpdateDTO?.Description) ? projectDB.Description : projectUpdateDTO.Description;
             projectDB.EndDate = projectUpdateDTO?.EndDate.HasValue == true ? projectUpdateDTO.EndDate.Value : projectDB.EndDate;
+            projectDB.UsersId = [.. projectDB.UsersId, ..projectUpdateDTO?.UsersId];
 
             _context.Projects.Update(projectDB);
 
