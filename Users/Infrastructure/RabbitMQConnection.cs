@@ -34,7 +34,7 @@ namespace Users.Infrastructure
             }
         }
 
-        public RabbitMQConnection()
+        private RabbitMQConnection()
         {
             Initialization = InitializeAsync();
         }
