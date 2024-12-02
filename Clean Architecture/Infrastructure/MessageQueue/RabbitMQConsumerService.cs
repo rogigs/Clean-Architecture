@@ -1,11 +1,14 @@
 ﻿using System.Text;
+using Clean_Architecture.Application.Exceptions;
 using Clean_Architecture.Application.UseCases.DTO;
 using Clean_Architecture.Domain.Interfaces;
-using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using JsonNet = Newtonsoft.Json;
+using Newtonsoft.Json;
+using SystemTextJson = System.Text.Json;
 
-namespace Clean_Architecture.Infrastructure
+namespace Clean_Architecture.Infrastructure.MessageQueue
 {
     public record Message
     {
@@ -78,6 +81,56 @@ namespace Clean_Architecture.Infrastructure
             await updateProject.ExecuteAsync(projectUpdateDTO, message.ProjectId);
         }
 
+        private async Task ProcessMessagesWithRetryAsync(
+            IUpdateProject updateProject,
+            CancellationToken stoppingToken,
+            Message message,
+            int maxRetries = 0
+        )
+        {
+            try
+            {
+                await ProcessMessagesAsync(updateProject, stoppingToken, message);
+                throw new Exception("Foi");
+            }
+            catch (ProjectException ex)
+            {
+                maxRetries++;
+
+                if (maxRetries >= 3)
+                {
+                    await sendMessageToDLQAsync(message, ex);
+
+                    return;
+                }
+
+                await ProcessMessagesWithRetryAsync(
+                    updateProject,
+                    stoppingToken,
+                    message,
+                    maxRetries
+                );
+            }
+        }
+
+        private async Task sendMessageToDLQAsync(Message message, ProjectException exception)
+        {
+            try
+            {
+
+                RabbitMQConnection rabbitMqConnection = RabbitMQConnection.Instance;
+                await rabbitMqConnection.Initialization;
+                await rabbitMqConnection.SendMessageAsync("sendUserIdToProjectDLQ", SystemTextJson.JsonSerializer.Serialize(new { message, exception }));
+                await rabbitMqConnection.CloseAsync();
+            }
+            catch (Exception ex)
+            {
+                // TODO: add Observability hire
+                Console.WriteLine(ex);
+
+            }
+        }
+
         protected override async Task<Task> ExecuteAsync(CancellationToken stoppingToken)
         {
             await Initialization;
@@ -89,25 +142,25 @@ namespace Clean_Architecture.Infrastructure
                 var body = ea.Body.ToArray();
                 var jsonString = Encoding.UTF8.GetString(body);
 
-                JsonSerializerSettings settings = new()
+                JsonNet.JsonSerializerSettings settings = new()
                 {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore,
+                    NullValueHandling = JsonNet.NullValueHandling.Ignore,
+                    MissingMemberHandling = JsonNet.MissingMemberHandling.Ignore,
                 };
 
-                Message message = JsonConvert.DeserializeObject<Message>(jsonString, settings);
+                Message message = JsonNet.JsonConvert.DeserializeObject<Message>(jsonString, settings);
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var updateProject = scope.ServiceProvider.GetRequiredService<IUpdateProject>();
 
-                    await ProcessMessagesAsync(updateProject, stoppingToken, message);
+                    await ProcessMessagesWithRetryAsync(updateProject, stoppingToken, message);
                 }
 
                 await _channel.BasicAckAsync(ea.DeliveryTag, false);
             };
 
-            _channel.BasicConsumeAsync(
+            await _channel.BasicConsumeAsync(
                 queue: "sendUserIdToProject",
                 autoAck: false,
                 consumer: consumer

@@ -1,8 +1,8 @@
 using Clean_Architecture.Application.UseCases;
 using Clean_Architecture.Application.Validations;
 using Clean_Architecture.Domain.Interfaces;
-using Clean_Architecture.Infrastructure;
 using Clean_Architecture.Infrastructure.Data;
+using Clean_Architecture.Infrastructure.MessageQueue;
 using Clean_Architecture.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +35,7 @@ builder.Services.AddControllers(options =>
         new NamespaceRoutingConvention());
 });
 
+// TODO: app should run if rabbimq service dropped
 builder.Services.AddHostedService<RabbitMQConsumerService>();
 
 
