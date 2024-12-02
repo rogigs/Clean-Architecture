@@ -6,6 +6,11 @@ The project was developed with the goal of studying and applying the concepts of
 
 In addition, the application performs CRUD operations in a scenario where project monitoring is required.
 
+
+## Documentation
+
+[Wiki](https://github.com/rogigs/Clean-Architecture/wiki)
+
 ## Screenshots
 
 ![preview-application](https://github.com/user-attachments/assets/4ca1ed9e-0bb8-4579-8fb1-3a4015f470ec)
