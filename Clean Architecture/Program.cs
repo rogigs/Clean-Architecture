@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Clean_Architecture.Application.UseCases;
 using Clean_Architecture.Application.Validations;
 using Clean_Architecture.Domain.Interfaces;
@@ -33,7 +34,11 @@ builder.Services.AddControllers(options =>
 {
     options.Conventions.Add(
         new NamespaceRoutingConvention());
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
+;
 
 // TODO: app should run if rabbimq service dropped
 builder.Services.AddHostedService<RabbitMQConsumerService>();

@@ -4,6 +4,7 @@ using Users.Application.Validations;
 using Users.Domain.Interfaces;
 using Users.Infrastructure.Data;
 using Users.Infrastructure.Repositories;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,12 @@ builder.Services.AddControllers(options =>
 {
     options.Conventions.Add(
         new NamespaceRoutingConvention());
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
+
+   
 
 var app = builder.Build();
 
