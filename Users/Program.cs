@@ -22,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
        .LogTo(Console.WriteLine, LogLevel.Information);
 });
 
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<ICreateUser, CreateUser>();

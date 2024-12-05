@@ -91,18 +91,17 @@ namespace Clean_Architecture.Infrastructure.MessageQueue
             try
             {
                 await ProcessMessagesAsync(updateProject, stoppingToken, message);
-                throw new Exception("Foi");
             }
             catch (ProjectException ex)
             {
-                maxRetries++;
-
                 if (maxRetries >= 3)
                 {
                     await sendMessageToDLQAsync(message, ex);
-
                     return;
                 }
+
+
+                maxRetries++;
 
                 await ProcessMessagesWithRetryAsync(
                     updateProject,
@@ -113,7 +112,7 @@ namespace Clean_Architecture.Infrastructure.MessageQueue
             }
         }
 
-        private async Task sendMessageToDLQAsync(Message message, ProjectException exception)
+        private static async Task sendMessageToDLQAsync(Message message, ProjectException exception)
         {
             try
             {

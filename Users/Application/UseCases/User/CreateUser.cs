@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using System.Text;
+﻿using System.Text;
+using System.Text.Json;
 using Users.Application.Exceptions;
 using Users.Application.UseCases.DTO;
 using Users.Domain.Entities;
@@ -8,40 +8,53 @@ using Users.Infrastructure;
 
 namespace Users.Application.UseCases
 {
-    internal sealed class CreateUser(IUserRepository userRepository, HttpClient httpClient) : ICreateUser
+    internal sealed class CreateUser(
+        IUserRepository userRepository,
+        HttpClient httpClient,
+        IConfiguration configuration
+    ) : ICreateUser
     {
         private readonly IUserRepository _userRepository = userRepository;
+        private readonly string _authServiceBaseUrl = configuration["Services:Auth"] ?? throw new ArgumentNullException("Services:Auth", "Auth service base URL is not configured.");
+
         private readonly HttpClient _httpClient = httpClient;
 
         public async Task<(UserException?, User?)> ExecuteAsync(UserDTO userDTO)
         {
             try
             {
-                // TODO: Implement consistency with data between two services
                 string json = JsonSerializer.Serialize(new { userDTO.Email, userDTO.Password });
                 StringContent content = new(json, Encoding.UTF8, "application/json");
 
-                //await _httpClient.PostAsync("http://localhost:5127/Api/Authentication/CreateUser", content);
+                HttpResponseMessage authResponse = await _httpClient.PostAsync(
+                    _authServiceBaseUrl + "Authentication/CreateUser",
+                    content
+                );
 
-                User user = new()
-                {
-                    Name = userDTO.Name,
-                    Email = userDTO.Email,
-                };
+                if (!authResponse.IsSuccessStatusCode)
+                    return (
+                        new UserException("Failed to create user in the authentication service."),
+                        null
+                    );
 
-                var messageObj = new
-                {
-                    UserId = 123,
-                    UserName = "John Doe",
-                    Email = "john.doe@example.com"
-                };
+                User user = new() { Name = userDTO.Name, Email = userDTO.Email };
 
+                // TODO: add manual reversal
+                await _userRepository.Add(user);
+
+                // TODO: Add outbox pattern
                 RabbitMQConnection rabbitMqConnection = RabbitMQConnection.Instance;
-                await rabbitMqConnection.Initialization;
-                await rabbitMqConnection.SendMessageAsync("sendUserIdToProject", JsonSerializer.Serialize(new { user.UserId, userDTO.ProjectId }));
+                var (exception, status) = await rabbitMqConnection.Initialization;
+
+                if (exception != null)
+                    return (new UserException(exception.Message, exception), null);
+
+                await rabbitMqConnection.SendMessageAsync(
+                    "sendUserIdToProject",
+                    JsonSerializer.Serialize(new { user.UserId, userDTO.ProjectId })
+                );
                 await rabbitMqConnection.CloseAsync();
 
-                await _userRepository.Add(user);
                 return (null, user);
             }
             catch (Exception ex)
