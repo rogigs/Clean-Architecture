@@ -1,58 +1,70 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Users.Infrastructure.Data;
-using Users.Infrastructure;
 using Users.Domain.Interfaces;
+using Microsoft.Extensions.Hosting;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Users.Application.Processors
 {
-    public class OutboxMessageProcessor(AppDbContext context, ILogger<OutboxMessageProcessor> logger, IRabbitMQConnection rabbitMqConnection) : IHostedService
+    public class OutboxMessageProcessor(
+        ILogger<OutboxMessageProcessor> logger,
+        IServiceScopeFactory serviceScopeFactory) : IHostedService
     {
-        private readonly AppDbContext _context = context;
         private readonly ILogger<OutboxMessageProcessor> _logger = logger;
-        // TODO: add interface
-        private readonly IRabbitMQConnection _rabbitMqConnection = rabbitMqConnection;
+        private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await ProcessOutboxMessagesAsync();
+            _ = Task.Run(() => ProcessOutboxMessagesAsync(cancellationToken), cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        public async Task ProcessOutboxMessagesAsync()
+        private async Task ProcessOutboxMessagesAsync(CancellationToken cancellationToken)
         {
-            var unprocessedMessages = await _context.OutboxMessages
-                .Where(m => !m.Processed)
-                .ToListAsync();
-
-            var (exception, status) = await _rabbitMqConnection.Initialization;
-
-            Console.WriteLine("exception" + exception);
-            Console.WriteLine("status" + status);
-
-            if (exception != null)
-                throw exception;
-
-            foreach (var message in unprocessedMessages)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                try
+                using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                    await _rabbitMqConnection.SendMessageAsync(
-                        "sendUserIdToProject",
-                        message.Payload
-                    );
+                    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    var rabbitMqConnection = scope.ServiceProvider.GetRequiredService<IRabbitMQConnection>();
 
-                    message.Processed = true;
-                    _context.OutboxMessages.Update(message);
-                    await _context.SaveChangesAsync();
+                    var unprocessedMessages = await context.OutboxMessages
+                        .Where(m => !m.Processed)
+                        .ToListAsync(cancellationToken);
+
+                    var (exception, status) = await rabbitMqConnection.Initialization;
+
+                    if (exception != null)
+                    {
+                        _logger.LogError("Error during RabbitMQ initialization: {Exception}", exception);
+                        throw exception;
+                    }
+
+                    foreach (var message in unprocessedMessages)
+                    {
+                        try
+                        {
+                            await rabbitMqConnection.SendMessageAsync(
+                                "sendUserIdToProject",
+                                message.Payload
+                            );
+
+                            message.Processed = true;
+                            context.OutboxMessages.Update(message);
+                            await context.SaveChangesAsync(cancellationToken);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError($"Error processing message {message.OutboxMessageId}: {ex.Message}");
+                        }
+                    }
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Erro ao processar mensagem {message.OutboxMessageId}: {ex.Message}");
-                }
+
+                await Task.Delay(1000, cancellationToken); // Delay to prevent busy-waiting
             }
-
-                    await _rabbitMqConnection.CloseAsync();
         }
     }
 }

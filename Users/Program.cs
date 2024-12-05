@@ -30,7 +30,6 @@ builder.Services.AddScoped<HttpClient>();
 // Infraestructure
 builder.Services.AddScoped<IRabbitMQConnection, RabbitMQConnection>();
 
-
 // Repository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOutboxMessageRepository, OutboxMessageRepository>();
@@ -41,7 +40,7 @@ builder.Services.AddScoped<IReadUser, ReadUser>();
 builder.Services.AddScoped<IReadUsers, ReadUsers>();
 builder.Services.AddScoped<IDeleteUser, DeleteUser>();
 builder.Services.AddScoped<IUpdateUser, UpdateUser>();
-builder.Services.AddScoped<OutboxMessageProcessor>();
+builder.Services.AddHostedService<OutboxMessageProcessor>();
 
 
 builder.Services.AddControllers(options =>

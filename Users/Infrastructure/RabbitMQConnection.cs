@@ -107,7 +107,7 @@ namespace Users.Infrastructure
         {
             await Channel.QueueDeclareAsync(
                 queue: queueName,
-                durable: false,
+                durable: true,
                 exclusive: false,
                 autoDelete: false,
                 arguments: null
