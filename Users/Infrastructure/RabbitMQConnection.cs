@@ -6,7 +6,7 @@ using Users.Infrastructure.Exceptions;
 
 namespace Users.Infrastructure
 {
-    public sealed class RabbitMQConnection : IAsyncInitializationRetry<RabbitMQException, string>
+    public sealed class RabbitMQConnection : IRabbitMQConnection 
     {
         private IChannel? _channel;
         private IConnection? _connection;
@@ -44,7 +44,7 @@ namespace Users.Infrastructure
             }
         }
 
-        private RabbitMQConnection()
+        public RabbitMQConnection()
         {
             Initialization = InitializeAsyncRetryAsync();
         }

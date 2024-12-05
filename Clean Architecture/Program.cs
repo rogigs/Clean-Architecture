@@ -40,7 +40,7 @@ builder.Services.AddControllers(options =>
 });
 ;
 
-// TODO: app should run if rabbimq service dropped
+// TODO: app should run if rabbitmq service dropped
 builder.Services.AddHostedService<RabbitMQConsumerService>();
 
 

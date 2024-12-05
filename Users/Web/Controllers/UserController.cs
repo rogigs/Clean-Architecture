@@ -24,6 +24,7 @@ namespace Users.Web.Controllers
         {
             var (error, createdUser) = await _createUser.ExecuteAsync(UserDTO);
 
+            Console.WriteLine(error);
             return error == null ? CreatedAtAction(null, createdUser) : BadRequest(new { error.Message });
         }
 

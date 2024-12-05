@@ -5,6 +5,8 @@ using Users.Domain.Interfaces;
 using Users.Infrastructure.Data;
 using Users.Infrastructure.Repositories;
 using System.Text.Json.Serialization;
+using Users.Application.Processors;
+using Users.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,15 +23,27 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
        .LogTo(Console.WriteLine, LogLevel.Information);
 });
-
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddScoped<HttpClient>();
+
+// Infraestructure
+builder.Services.AddScoped<IRabbitMQConnection, RabbitMQConnection>();
+
+
+// Repository
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOutboxMessageRepository, OutboxMessageRepository>();
+
+// Application
 builder.Services.AddScoped<ICreateUser, CreateUser>();
 builder.Services.AddScoped<IReadUser, ReadUser>();
 builder.Services.AddScoped<IReadUsers, ReadUsers>();
 builder.Services.AddScoped<IDeleteUser, DeleteUser>();
 builder.Services.AddScoped<IUpdateUser, UpdateUser>();
+builder.Services.AddScoped<OutboxMessageProcessor>();
+
+
 builder.Services.AddControllers(options =>
 {
     options.Conventions.Add(

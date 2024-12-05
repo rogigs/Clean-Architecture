@@ -15,7 +15,12 @@ namespace Users.Application.UseCases
     ) : ICreateUser
     {
         private readonly IUserRepository _userRepository = userRepository;
-        private readonly string _authServiceBaseUrl = configuration["Services:Auth"] ?? throw new ArgumentNullException("Services:Auth", "Auth service base URL is not configured.");
+        private readonly string _authServiceBaseUrl =
+            configuration["Services:Auth"]
+            ?? throw new ArgumentNullException(
+                "Services:Auth",
+                "Auth service base URL is not configured."
+            );
 
         private readonly HttpClient _httpClient = httpClient;
 
@@ -26,34 +31,23 @@ namespace Users.Application.UseCases
                 string json = JsonSerializer.Serialize(new { userDTO.Email, userDTO.Password });
                 StringContent content = new(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage authResponse = await _httpClient.PostAsync(
-                    _authServiceBaseUrl + "Authentication/CreateUser",
-                    content
-                );
+                //HttpResponseMessage authResponse = await _httpClient.PostAsync(
+                //    _authServiceBaseUrl + "Authentication/CreateUser",
+                //    content
+                //);
 
-                if (!authResponse.IsSuccessStatusCode)
-                    return (
-                        new UserException("Failed to create user in the authentication service."),
-                        null
-                    );
+                //if (!authResponse.IsSuccessStatusCode)
+                //    return (
+                //        new UserException("Failed to create user in the authentication service."),
+                //        null
+                //    );
 
                 User user = new() { Name = userDTO.Name, Email = userDTO.Email };
+                var payload = JsonSerializer.Serialize(new { user.UserId, userDTO.ProjectId });
+                OutboxMessage outboxMessage = new() { Payload = payload, Processed = false };
 
                 // TODO: add manual reversal
-                await _userRepository.Add(user);
-
-                // TODO: Add outbox pattern
-                RabbitMQConnection rabbitMqConnection = RabbitMQConnection.Instance;
-                var (exception, status) = await rabbitMqConnection.Initialization;
-
-                if (exception != null)
-                    return (new UserException(exception.Message, exception), null);
-
-                await rabbitMqConnection.SendMessageAsync(
-                    "sendUserIdToProject",
-                    JsonSerializer.Serialize(new { user.UserId, userDTO.ProjectId })
-                );
-                await rabbitMqConnection.CloseAsync();
+                await _userRepository.Add(user, outboxMessage);
 
                 return (null, user);
             }
