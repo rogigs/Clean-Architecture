@@ -1,14 +1,14 @@
-﻿using Bogus;
-using Clean_Architecture.Application.UseCases;
-using Clean_Architecture.Domain.Entities;
-using Clean_Architecture.Domain.Interfaces;
+using Bogus;
+using Projects.Application.UseCases;
+using Projects.Domain.Entities;
+using Projects.Domain.Interfaces;
 using NSubstitute;
 using FluentAssertions;
-using Clean_Architecture.Application.Exceptions;
+using Projects.Application.Exceptions;
 using NSubstitute.ExceptionExtensions;
-using Clean_Architecture.Application.UseCases.DTO;
+using Projects.Application.UseCases.DTO;
 
-namespace Clean_Architecture.Tests.Application.UseCases
+namespace Projects.Tests.Application.UseCases
 {
     public class ReadProjectsTest
     {
@@ -31,7 +31,6 @@ namespace Clean_Architecture.Tests.Application.UseCases
                     new()
                     {
                         Name = _faker.Commerce.ProductName(),
-
                     },
                     new()
                     {

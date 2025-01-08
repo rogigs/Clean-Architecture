@@ -1,14 +1,14 @@
 ﻿using Bogus;
-using Clean_Architecture.Domain.Interfaces;
-using Clean_Architecture.Application.UseCases;
+using Projects.Domain.Interfaces;
+using Projects.Application.UseCases;
 using NSubstitute;
-using Clean_Architecture.Application.UseCases.DTO;
+using Projects.Application.UseCases.DTO;
 using FluentAssertions;
-using Clean_Architecture.Application.Exceptions;
+using Projects.Application.Exceptions;
 using NSubstitute.ExceptionExtensions;
-using Clean_Architecture.Domain.Entities;
+using Projects.Domain.Entities;
 
-namespace Clean_Architecture.Tests.Application.UseCases
+namespace Projects.Tests.Application.UseCases
 {
     public class CreateProjectTest
     {

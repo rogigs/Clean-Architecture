@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Clean_Architecture.Tests</RootNamespace>
+    <RootNamespace>Projects.Tests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Clean Architecture\Clean Architecture.csproj" />
+    <ProjectReference Include="..\Projects\Projects.csproj" />
   </ItemGroup>
 
   <ItemGroup>

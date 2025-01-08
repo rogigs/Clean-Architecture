@@ -19,6 +19,6 @@ namespace Projects.Domain.Entities
         public DateTime StartDate { get; init; } = DateTime.Now;
 
         public DateTime? EndDate { get; set; }
-        public required List<Guid> UsersId { get; set; } = [];
+        public List<Guid> UsersId { get; set; } = [];
     }
 }

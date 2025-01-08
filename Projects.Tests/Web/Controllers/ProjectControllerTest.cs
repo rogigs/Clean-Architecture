@@ -1,14 +1,14 @@
-﻿using Bogus;
-using Clean_Architecture.Application.UseCases.DTO;
-using Clean_Architecture.Domain.Entities;
-using Clean_Architecture.Domain.Interfaces;
-using Clean_Architecture.Web.Controllers;
+using Bogus;
+using Projects.Application.UseCases.DTO;
+using Projects.Domain.Entities;
+using Projects.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using FluentAssertions;
-using Clean_Architecture.Application.Exceptions;
+using Projects.Application.Exceptions;
+using Projects.Domain.Interfaces;
 
-namespace Clean_Architecture.Tests.Web.Controllers
+namespace Projects.Tests.Web.Controllers
 {
     public class ProjectControllerTest
     {

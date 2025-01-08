@@ -1,8 +1,8 @@
-﻿using Clean_Architecture.Domain.Entities;
+using Projects.Domain.Entities;
 using Bogus;
 using FluentAssertions;
 
-namespace Clean_Architecture.Tests.Domain.Entities
+namespace Projects.Tests.Domain.Entities
 {
 
     public class ProjectTest
