@@ -1,26 +1,26 @@
 
-# Clean Architecture
+# ProjectTrack
 
+The project was developed with the aim of studying and applying the concepts of Clean Architecture using .NET Core. The goal is to structure an application in a modular and decoupled way, promoting the separation of responsibilities and code maintainability. The project also includes the implementation of microservices to further enhance scalability and maintainability.
 
-The project was developed with the goal of studying and applying the concepts of Clean Architecture using .NET Core. The purpose is to structure an application in a modular and decoupled way, promoting the separation of responsibilities and code maintainability.
-
-In addition, the application performs CRUD operations in a scenario where project monitoring is required.
-
+Additionally, the application performs CRUD operations in a scenario where project monitoring is required, with responsibilities for tracking project progress and the users involved.
 
 ## Documentation
+ 
+[Wiki](https://github.com/rogigs/Clean-Architecture/wiki) - Hire have more about patterns, performance, system design , decisions and queues.
 
-[Wiki](https://github.com/rogigs/Clean-Architecture/wiki)
 
 ## Screenshots
 
-![preview-application](https://github.com/user-attachments/assets/4ca1ed9e-0bb8-4579-8fb1-3a4015f470ec)
+![services-endpoints](https://github.com/user-attachments/assets/4511eb4c-e9e0-4493-ad18-65f64700ce68)
+
 
 # Environment Variables
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=clean_arch;User=root;Password="
+    "DefaultConnection": "Server=localhost;Database=your_db;User=your_user;Password=your_password"
   }
 }
 ```
@@ -75,11 +75,6 @@ Maintaining a clear flow of data between layers is essential. Communication shou
 [Live Coding: Clean architecture na prática com Rodrigo Branas](https://www.youtube.com/watch?v=s3QsigPsXKI&t=7711s&pp=ygUZY2xlYW4gY29kZSByb2RyaWdvIGJyYW5hcw%3D%3D)
 
 [Clean Architecture: descubra o que é e onde aplicar Arquitetura Limpa](https://zup.com.br/blog/clean-architecture-arquitetura-limpa)
-
-# Microservices 🏗️...Building🏗️
-
-![image](https://github.com/user-attachments/assets/cb40ebad-d879-4fe4-abf5-20eee7628dea)
-
 
 
 
